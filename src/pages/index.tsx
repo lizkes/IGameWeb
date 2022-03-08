@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <NextSeo
-        title="IGame 优雅的游戏下载网站"
+        title="IGame - 优雅的游戏下载网站"
         description="你一直想要的游戏下载网站，简单，快速且优雅"
       />
       <main>

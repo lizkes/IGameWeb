@@ -1,14 +1,14 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionCache from "src/utils/createEmotionCache";
 import createEmotionServer from "@emotion/server/create-instance";
-import lightTheme from "src/themes/lightTheme";
+import darkTheme from "src/themes/darkTheme";
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="zh-CN">
         <Head>
-          <meta name="theme-color" content={lightTheme.palette.primary.main} />
+          <meta name="theme-color" content={darkTheme.palette.primary.main} />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
           {(this.props as any).emotionStyleTags}
         </Head>

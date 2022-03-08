@@ -5,7 +5,7 @@ type Props = {
   children: ReactElement;
 };
 
-const HideOnScroll: FC<Props> = ({ children }) => {
+export default function HideOnScroll({ children }: Props) {
   const trigger = useScrollTrigger();
 
   return (
@@ -13,6 +13,4 @@ const HideOnScroll: FC<Props> = ({ children }) => {
       {children}
     </Slide>
   );
-};
-
-export default HideOnScroll;
+}
