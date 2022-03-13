@@ -14,7 +14,8 @@ const darkTheme = createTheme(
       background: { default: "#111111", paper: "#2a2a2a" },
     },
     typography: {
-      fontFamily: "'Noto Sans SC', 'Microsoft YaHei', sans-serif",
+      // fontFamily: "'Noto Sans SC', 'Microsoft YaHei', sans-serif",
+      fontFamily: "'Microsoft YaHei', sans-serif",
       h1: {
         fontSize: "3rem",
       },
@@ -46,6 +47,20 @@ const darkTheme = createTheme(
               borderWidth: "2px",
               filter: "brightness(1.2)",
             },
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: "none",
+          },
+        },
+      },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            backgroundImage: "none",
           },
         },
       },

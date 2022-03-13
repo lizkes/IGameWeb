@@ -1,21 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AppBar, Box, Container, Button } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { useTheme } from "@mui/material/styles";
+import { Search as SearchIcon } from "@mui/icons-material";
 
-import { useStore } from "src/hooks";
 import HideOnScroll from "src/components/HideOnScroll";
 
 export default function BigHeader() {
-  const userId = useStore((store) => store.userId);
+  const theme = useTheme();
 
   return (
     <>
       <HideOnScroll>
         <AppBar
           sx={{
-            backgroundColor: "#2a2a2a",
-            backgroundImage: "none",
+            backgroundColor: theme.palette.background.paper,
             boxShadow: "0",
           }}
         >

@@ -2,19 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { AppBar, Box, Container, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 import HideOnScroll from "src/components/HideOnScroll";
 
 const HeaderDrawer = dynamic(() => import("./HeaderDrawer"));
 
 export default function BigHeader() {
+  const theme = useTheme();
+
   return (
     <>
       <HideOnScroll>
         <AppBar
           sx={{
-            backgroundColor: "#2a2a2a",
-            backgroundImage: "none",
+            backgroundColor: theme.palette.background.paper,
             boxShadow: "0",
           }}
         >

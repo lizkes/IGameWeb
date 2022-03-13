@@ -18,7 +18,7 @@ export default function HeaderDrawer() {
           onClick={() => setOpen(false)}
           display="flex"
           flexDirection="column"
-          width="220px"
+          width="240px"
           padding="24px"
         >
           <Button

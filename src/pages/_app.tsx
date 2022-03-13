@@ -7,10 +7,10 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 
-import "@fontsource/noto-sans-sc/chinese-simplified-300.css";
-import "@fontsource/noto-sans-sc/chinese-simplified-400.css";
-import "@fontsource/noto-sans-sc/chinese-simplified-500.css";
-import "@fontsource/noto-sans-sc/chinese-simplified-700.css";
+// import "@fontsource/noto-sans-sc/chinese-simplified-300.css";
+// import "@fontsource/noto-sans-sc/chinese-simplified-400.css";
+// import "@fontsource/noto-sans-sc/chinese-simplified-500.css";
+// import "@fontsource/noto-sans-sc/chinese-simplified-700.css";
 
 import { darkTheme } from "src/themes";
 import createEmotionCache from "src/utils/createEmotionCache";

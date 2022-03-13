@@ -12,13 +12,8 @@ export default function Custom404() {
         height: "100vh",
       }}
     >
-      <Typography
-        color="secondary"
-        variant="h1"
-        fontWeight="400"
-        sx={{ mb: 2 }}
-      >
-        该页面不存在
+      <Typography color="primary" variant="h1" fontWeight="400" sx={{ mb: 4 }}>
+        页面不存在
       </Typography>
 
       <Link href="/" passHref>
