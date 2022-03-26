@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { Update, LockOutlined, LockOpen } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-import { green, red } from "@mui/material/colors";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
@@ -25,6 +24,7 @@ import { ENTRY_NUMBER_PER_PAGE } from "src/variants";
 import { handleAxiosError } from "src/utils/error";
 import { dateFormat, toDate } from "src/utils/time";
 import { expToLevel } from "src/utils/exp";
+import { baseAxios } from "src/apis";
 import { Tag } from "src/apis/tag";
 import { useUserInfoQuery } from "src/apis/user";
 import { useAppBriefInfosQuery, useAppAmountQuery } from "src/apis/app";
@@ -144,7 +144,10 @@ function GameCover({
               sx={{
                 ...chipStyle,
                 paddingLeft: "2px",
-                backgroundColor: allowedExp > userExp ? red.A700 : green[600],
+                backgroundColor:
+                  allowedExp > userExp
+                    ? theme.palette.error.main
+                    : theme.palette.success.main,
                 "& .MuiChip-label": {
                   paddingLeft: "6px",
                 },
@@ -163,15 +166,28 @@ function GameCover({
   );
 }
 
-function Game() {
+function GamesPage() {
   const sendSnackbar = useSnackbar();
+  const router = useRouter();
   const userId = useStore((store) => store.userId);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const offset = useMemo(
-    () => (currentPage - 1) * ENTRY_NUMBER_PER_PAGE,
-    [currentPage]
-  );
+  const currentPageFromUrl = useMemo(() => {
+    if (router.query.page) {
+      let page;
+      if (Array.isArray(router.query.page)) {
+        page = parseInt(router.query.page[0]);
+      } else {
+        page = parseInt(router.query.page);
+      }
+      if (page === NaN || page < 1) {
+        router.replace("/404");
+      }
+      return page;
+    } else {
+      return 1;
+    }
+  }, [router]);
+  const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
 
   // 查询API
   const userInfoQuery = useUserInfoQuery(
@@ -198,7 +214,7 @@ function Game() {
   const gameBriefInfosQuery = useAppBriefInfosQuery(
     {
       appType: "game",
-      offset: offset,
+      offset: (currentPage - 1) * ENTRY_NUMBER_PER_PAGE,
       limit: ENTRY_NUMBER_PER_PAGE,
       sortBy: "id",
       tagIds: [],
@@ -231,10 +247,9 @@ function Game() {
   }, [gameBriefInfosQuery.data]);
 
   // 返回页面
-  let page;
   if (gameBriefInfosQuery.isLoading) {
     // 等待页面
-    page = (
+    return (
       <Container
         maxWidth="xl"
         sx={{
@@ -289,10 +304,10 @@ function Game() {
     );
   } else if (gameBriefInfos === undefined) {
     // 错误页面
-    page = <MessagePage message="获取游戏封面失败" variant="error" />;
+    return <MessagePage message="获取游戏封面失败" variant="error" />;
   } else {
     // 正常页面
-    page = (
+    return (
       <Container
         maxWidth="xl"
         sx={{
@@ -364,6 +379,9 @@ function Game() {
             onChange={(_: any, value: number) => {
               if (value !== currentPage) {
                 setCurrentPage(value);
+                router.push(`/games?page=${value}`, undefined, {
+                  shallow: true,
+                });
               }
             }}
             sx={{
@@ -377,20 +395,55 @@ function Game() {
       </Container>
     );
   }
+}
 
+function SeoPage() {
   return (
     <>
       <NextSeo
-        title="IGame - 优雅的游戏下载网站"
+        title="游戏库 - IGame"
         description="你一直想要的游戏下载网站，简单，快速且优雅"
       />
-      {page}
+      <GamesPage />
     </>
   );
 }
 
-Game.getLayout = function getLayout(page: ReactElement) {
+SeoPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export default Game;
+export default SeoPage;
+
+// https://nextjs.org/docs/basic-features/data-fetching/get-static-paths
+export async function getStaticPaths() {
+  // Call an external API endpoint to get posts
+  const res = await baseAxios.get("/app/amount", { params: { type: "game" } });
+  // Get the paths we want to pre-render based on posts
+  if (res.status === 200) {
+    const pageAmount: number = Math.ceil(
+      res.data.amount / ENTRY_NUMBER_PER_PAGE
+    );
+    const paths = [...Array(pageAmount).keys()].map((pageCount) => ({
+      params: { pageId: pageCount + 1 },
+    }));
+    // https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
+    return { paths, fallback: true };
+  } else {
+    return null;
+  }
+}
+
+// https://nextjs.org/docs/api-reference/data-fetching/get-static-props
+export async function getStaticProps({
+  params,
+}: {
+  params: { pageId: number };
+}) {
+  // params contains the post `id`.
+  // If the route is like /posts/1, then params.id is 1
+  const res = await fetch(`https://.../posts/${params.pageId}`);
+  const post = await res.json();
+
+  return { props: { post }, revalidate: 28800 };
+}

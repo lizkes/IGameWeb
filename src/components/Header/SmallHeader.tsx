@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { AppBar, Box, Container, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
+import { HOME_URL } from "src/variants";
 import HideOnScroll from "src/components/HideOnScroll";
 
 const HeaderDrawer = dynamic(() => import("./HeaderDrawer"));
@@ -34,7 +35,7 @@ export default function BigHeader() {
                   width: "36.8px",
                 }}
               >
-                <Link href="/">
+                <Link href={HOME_URL}>
                   <a>
                     <Image
                       src="/igame.svg"

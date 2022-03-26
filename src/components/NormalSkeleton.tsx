@@ -3,18 +3,26 @@ import { Skeleton, Fade, Theme } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 type Props = {
-  paddingTop: string;
+  paddingTop?: string;
   timeout?: number;
+  width?: string;
+  height?: string;
 };
 
-const NormalSkeleton: FC<Props> = ({ paddingTop, timeout = 300 }) => {
+const NormalSkeleton: FC<Props> = ({
+  paddingTop = "0px",
+  timeout = 300,
+  width = "100%",
+  height = "100%",
+}) => {
   const theme = useTheme();
 
   return (
     <div
       style={{
         position: "relative",
-        width: "100%",
+        width: width,
+        height: height,
         paddingTop: paddingTop,
         backgroundColor: theme.palette.background.default,
       }}

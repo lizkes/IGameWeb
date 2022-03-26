@@ -1,7 +1,10 @@
 import { Button, Container, Typography } from "@mui/material";
 import Link from "next/link";
+import { NextSeo } from "next-seo";
 
-export default function Custom404() {
+import { HOME_URL } from "src/variants";
+
+function NotFoundPage() {
   return (
     <Container
       sx={{
@@ -16,7 +19,7 @@ export default function Custom404() {
         页面不存在
       </Typography>
 
-      <Link href="/" passHref>
+      <Link href={HOME_URL} passHref>
         <Button component="a" size="large" variant="contained">
           返回主页
         </Button>
@@ -24,3 +27,17 @@ export default function Custom404() {
     </Container>
   );
 }
+
+function SeoPage() {
+  return (
+    <>
+      <NextSeo
+        title="页面不存在 - IGame"
+        description="你一直想要的游戏下载网站，简单，快速且优雅"
+      />
+      <NotFoundPage />
+    </>
+  );
+}
+
+export default SeoPage;
