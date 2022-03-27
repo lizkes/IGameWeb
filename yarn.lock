@@ -50,10 +50,17 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.10", "@babel/runtime@^7.16.3", "@babel/runtime@^7.17.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.2", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.13.10", "@babel/runtime@^7.16.3", "@babel/runtime@^7.17.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.7":
   version "7.17.2"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.17.2.tgz#66f68591605e59da47523c631416b18508779941"
   integrity sha512-hzeyJyMA1YGdJTuWU0e/j4wKXrU4OMFvY2MSlaI9B7VQb0r5cxTE3EAIS2Q7Tn2RIcDkRvTA/v2JsAEhxe99uw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.6.2":
+  version "7.17.8"
+  resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.17.8.tgz#3e56e4aff81befa55ac3ac6a0967349fd1c5bca2"
+  integrity sha512-dQpEpK0O9o6lj6oPu0gRDbbnk+4LeHlNcBpspf6Olzt3GIX4P1lWF1gS+pHLDFlaJvbR6q7jCfQ08zA4QJBnmA==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -228,11 +235,6 @@
     js-yaml "^4.1.0"
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
-
-"@fontsource/noto-sans-sc@^4.5.7":
-  version "4.5.7"
-  resolved "https://registry.npmmirror.com/@fontsource/noto-sans-sc/-/noto-sans-sc-4.5.7.tgz#40ae91af7e8f81c925508bbc0f5b3ca8f7812203"
-  integrity sha512-oUHBRLZZI+uzQ3Q5R1fV5p3aLgF/4IOeUqrdDk8SfsmKcqKHh3ye6329Ev2UB6XsyZ4pHJMsabo5ALUMVgChIQ==
 
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.3"
@@ -456,27 +458,12 @@
   resolved "https://registry.npmmirror.com/@rushstack/eslint-patch/-/eslint-patch-1.0.8.tgz#be3e914e84eacf16dbebd311c0d0b44aa1174c64"
   integrity sha512-ZK5v4bJwgXldAUA8r3q9YKfCwOqoHTK/ZqRjSeRXQrBXWouoPnS4MQtgC4AXGiiBuUu5wxrRgTlv0ktmM4P1Aw==
 
-"@seznam/compose-react-refs@^1.0.4":
-  version "1.0.6"
-  resolved "https://registry.npmmirror.com/@seznam/compose-react-refs/-/compose-react-refs-1.0.6.tgz#6ec4e70bdd6e32f8e70b4100f27267cf306bd8df"
-  integrity sha512-izzOXQfeQLonzrIQb8u6LQ8dk+ymz3WXTIXjvOlTXHq6sbzROg3NWU+9TTAOpEoK9Bth24/6F/XrfHJ5yR5n6Q==
-
-"@stencil/core@2.5.2":
-  version "2.5.2"
-  resolved "https://registry.npmmirror.com/@stencil/core/-/core-2.5.2.tgz#ad00d495ee37bbed4044524d59c7f22de15ab4a7"
-  integrity sha512-bgjPXkSzzg1WnTgVUm6m5ZzpKt602WmA/QljODAW1xVN40OHJdbGblzF/F6MFzqv2c5Cy30CB41arc8qADIdcQ==
-
 "@types/debug@^4.0.0":
   version "4.1.7"
   resolved "https://registry.npmmirror.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
   integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
   dependencies:
     "@types/ms" "*"
-
-"@types/fscreen@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmmirror.com/@types/fscreen/-/fscreen-1.0.1.tgz#d924e07d0468eb056abeca41bd54e742ddce2b6d"
-  integrity sha512-hV2d0BreihMGtrg+EdAFOIl/O2EL5vhAheHJUztGE/lPFZIN8ZCpGFL8hCbtyi1CfhKjDRCf47sHjP+FwJ4q0Q==
 
 "@types/hast@^2.0.0":
   version "2.3.4"
@@ -607,24 +594,6 @@
   dependencies:
     "@typescript-eslint/types" "5.10.1"
     eslint-visitor-keys "^3.0.0"
-
-"@vime/core@^5.3.1":
-  version "5.3.1"
-  resolved "https://registry.npmmirror.com/@vime/core/-/core-5.3.1.tgz#2df60b8a5c959808d98d29ca4ee63ef9d1ca22b5"
-  integrity sha512-FbBla3WhQ72rWZUBR93XVpNAJwOMdQeWx8ZbRffYL5PXq0PzqSnjrYcE1KIsnmDt6v2jsOxh4hT264Rts5jBKQ==
-  dependencies:
-    "@stencil/core" "2.5.2"
-    "@types/fscreen" "^1.0.1"
-    fscreen "^1.2.0"
-    mitt "^3.0.0"
-    stencil-wormhole "^3.4.1"
-
-"@vime/react@^5.3.1":
-  version "5.3.1"
-  resolved "https://registry.npmmirror.com/@vime/react/-/react-5.3.1.tgz#918fd447fa9428a7e3e4d984d5c4c646b55438ea"
-  integrity sha512-MnWua6FCQ84af1k4jan1aaLmL57UF2WKwqhw8fw9PQ3Rz7W+vdPEb9VmNnyNZ3PessQRg5O7R94QRvUNKqkGog==
-  dependencies:
-    "@seznam/compose-react-refs" "^1.0.4"
 
 acorn-jsx@^5.3.1:
   version "5.3.2"
@@ -1489,11 +1458,6 @@ fs.realpath@^1.0.0:
   resolved "https://registry.npmmirror.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fscreen@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmmirror.com/fscreen/-/fscreen-1.2.0.tgz#1a8c88e06bc16a07b473ad96196fb06d6657f59e"
-  integrity sha512-hlq4+BU0hlPmwsFjwGGzZ+OZ9N/wq9Ljg/sq3pX+2CD7hrJsX9tJgWWK/wiNTFM212CLHWhicOoqwXyZGGetJg==
-
 function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmmirror.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
@@ -2265,11 +2229,6 @@ minimist@^1.2.6:
   resolved "https://registry.npmmirror.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
-mitt@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmmirror.com/mitt/-/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
-  integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
-
 mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
   version "0.5.3"
   resolved "https://registry.npmmirror.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
@@ -2683,10 +2642,10 @@ react-markdown@^8.0.1:
     unist-util-visit "^4.0.0"
     vfile "^5.0.0"
 
-react-query@^3.34.17:
-  version "3.34.17"
-  resolved "https://registry.npmmirror.com/react-query/-/react-query-3.34.17.tgz#98951a9c2b053242e7f32cd3d67a488812033081"
-  integrity sha512-59aJeYupEIlw7U7iC8EzgpLyrfZ3GpAf3SCyZBnpsskJjaq0WltuLkezAw0gvJud9Qw6/AWtNPr73zryJXWeZA==
+react-query@^3.34.18:
+  version "3.34.18"
+  resolved "https://registry.npmmirror.com/react-query/-/react-query-3.34.18.tgz#da9027035a9974bec12fdb71965763398c1d17c1"
+  integrity sha512-CVgVVUTRFQIKlpdIcW7mzdUX2U7bPU+tXgoTo2KOTt1+LYZFtdx+4aWK+1YaabgJgAjx1ISBrDMfPxzj/8p28w==
   dependencies:
     "@babel/runtime" "^7.5.5"
     broadcast-channel "^3.4.1"
@@ -2952,11 +2911,6 @@ space-separated-tokens@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npmmirror.com/space-separated-tokens/-/space-separated-tokens-2.0.1.tgz#43193cec4fb858a2ce934b7f98b7f2c18107098b"
   integrity sha512-ekwEbFp5aqSPKaqeY1PGrlGQxPNaq+Cnx4+bE2D8sciBQrHpbwoBbawqTN2+6jPs9IdWxxiUcN0K2pkczD3zmw==
-
-stencil-wormhole@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.npmmirror.com/stencil-wormhole/-/stencil-wormhole-3.4.1.tgz#f6c74d38cca38470884fca7353486620072d3734"
-  integrity sha512-ppYTcWTJnIl4ZAKwF39LTA9f/ypHfbVefsHdN2hpMQGrR57wt1TieZo9tlCM/r1Y4SFiZ5yz/cjho564C921Xw==
 
 string-width@^1.0.1:
   version "1.0.2"

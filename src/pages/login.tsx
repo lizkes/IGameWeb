@@ -47,7 +47,7 @@ function LoginPage() {
   const sendSnackbar = useSnackbar();
   const router = useRouter();
   const userId = useStore((store) => store.userId);
-  const setUserId = useStore((store) => store.setUserId);
+  const userLogin = useStore((store) => store.userLogin);
 
   const [state, setState] = useState<BaseState>({
     emailIsError: false,
@@ -124,9 +124,9 @@ function LoginPage() {
       const data = userLoginMutation.data.data;
       setAccessToken(data.access_token);
       setRefreshToken(data.refresh_token);
-      setUserId(data.user_id);
+      userLogin(data.user_id);
     }
-  }, [setUserId, state, userLoginMutation.data]);
+  }, [userLogin, state, userLoginMutation.data]);
 
   const loginButtonClick = useCallback(() => {
     if (state.emailIsError) {

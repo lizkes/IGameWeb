@@ -54,7 +54,7 @@ function RegisterPage() {
   const sendSnackbar = useSnackbar();
   const router = useRouter();
   const userId = useStore((store) => store.userId);
-  const setUserId = useStore((store) => store.setUserId);
+  const userLogin = useStore((store) => store.userLogin);
 
   const [countDownIsRunning, setCountDownIsRunning] = useState(false);
 
@@ -194,9 +194,9 @@ function RegisterPage() {
       const data = userRegisterMutation.data.data;
       setAccessToken(data.access_token);
       setRefreshToken(data.refresh_token);
-      setUserId(data.user_id);
+      userLogin(data.user_id);
     }
-  }, [sendSnackbar, state, userRegisterMutation.data, setUserId]);
+  }, [sendSnackbar, state, userRegisterMutation.data, userLogin]);
 
   const verifyEmailButtonClick = useCallback(() => {
     if (state.emailIsError) {

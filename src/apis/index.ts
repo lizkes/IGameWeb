@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { QueryKey, UseMutationOptions, UseQueryOptions } from "react-query";
+
 import {
   getAccessToken,
   getRefreshToken,
@@ -23,38 +24,38 @@ type ApiMutationOptions<T = void, V = void> = Omit<
 
 const baseAxios = axios.create({
   baseURL: "https://api.igame.ml",
-  timeout: 10000,
+  timeout: 8000,
 });
 
-type RefreshTokenData = {
-  userId: number;
-  access_token: string;
-  refresh_token: string;
-};
 const getAuthAxios = async () => {
   let accessToken = getAccessToken();
-  if (!accessToken) {
+  if (accessToken === undefined) {
     const refreshToken = getRefreshToken();
-    if (!refreshToken) {
+    if (refreshToken === undefined) {
       return baseAxios;
     }
-    try {
-      const res = await baseAxios.post("/user/token", {
-        refresh_token: refreshToken,
-      });
-      const data = res.data as RefreshTokenData;
-      accessToken = data.access_token;
-      setAccessToken(data.access_token);
-      setRefreshToken(data.refresh_token);
-    } catch (err) {
-      console.error(err);
+
+    const res = await baseAxios.post("/user/token", {
+      refresh_token: refreshToken,
+    });
+    if (res.status !== 200) {
       return baseAxios;
     }
+
+    type RefreshTokenData = {
+      userId: number;
+      access_token: string;
+      refresh_token: string;
+    };
+    const data = res.data as RefreshTokenData;
+    accessToken = data.access_token;
+    setAccessToken(data.access_token);
+    setRefreshToken(data.refresh_token);
   }
   return axios.create({
     baseURL: "https://api.igame.ml",
     headers: { Authorization: `token ${accessToken}` },
-    timeout: 10000,
+    timeout: 8000,
   });
 };
 

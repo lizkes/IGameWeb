@@ -1,14 +1,18 @@
 import create, { SetState } from "zustand";
 
 type Store = {
-  userId: number | undefined;
-  setUserId: (userId: number | undefined) => void;
+  userId?: number;
+  userLogin: (userId: number) => void;
+  userLogout: () => void;
 };
 
 const useStore = create<Store>((set: SetState<Store>) => ({
   userId: undefined,
-  setUserId: (userId) => {
+  userLogin: (userId) => {
     set({ userId: userId });
+  },
+  userLogout: () => {
+    set({ userId: undefined });
   },
 }));
 

@@ -7,11 +7,6 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 
-// import "@fontsource/noto-sans-sc/chinese-simplified-300.css";
-// import "@fontsource/noto-sans-sc/chinese-simplified-400.css";
-// import "@fontsource/noto-sans-sc/chinese-simplified-500.css";
-// import "@fontsource/noto-sans-sc/chinese-simplified-700.css";
-
 import { darkTheme } from "src/themes";
 import createEmotionCache from "src/utils/createEmotionCache";
 import { getUserIdFromToken } from "src/utils/token";
@@ -35,19 +30,19 @@ function MyApp({
 }: MyAppProps) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
-  // 获取query客户端
   const [queryClient] = useState(() => new QueryClient());
+
+  // set user state from server if localstorage has token
   const userId = useStore((store) => store.userId);
-  const setUserId = useStore((store) => store.setUserId);
-  // 将localstorage的token转换成用户状态
+  const userLogin = useStore((store) => store.userLogin);
   useEffect(() => {
     if (userId === undefined) {
-      const userIdFromToken = getUserIdFromToken() ?? undefined;
-      if (userIdFromToken !== userId) {
-        setUserId(userIdFromToken);
+      const userIdFromToken = getUserIdFromToken();
+      if (userIdFromToken !== undefined) {
+        userLogin(userIdFromToken);
       }
     }
-  }, [userId, setUserId]);
+  }, [userId, userLogin]);
 
   return (
     <CacheProvider value={emotionCache}>

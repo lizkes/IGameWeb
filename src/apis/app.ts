@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, QueryClient } from "react-query";
 import {
   ApiQueryOptions,
   ApiMutationOptions,
@@ -31,6 +31,18 @@ const useAppAmountQuery = (
   );
 };
 
+const prefetchAppAmountQuery = async (
+  queryClient: QueryClient,
+  { appType }: { appType: AppType }
+) => {
+  await queryClient.prefetchQuery(["appAmount", appType], async () => {
+    const { data } = await baseAxios.get("/app/amount", {
+      params: { type: appType },
+    });
+    return { data };
+  });
+};
+
 type AppBriefInfo = {
   id: number;
   type: AppType;
@@ -60,7 +72,7 @@ const useAppBriefInfosQuery = (
     limit: number;
     sortBy: string;
     tagIds: Array<number>;
-    dependAppId?: number;
+    dependAppId: number | null;
   },
   options?: ApiQueryOptions<AppBriefInfosQueryData>
 ) => {
@@ -79,6 +91,42 @@ const useAppBriefInfosQuery = (
       });
     },
     options
+  );
+};
+
+const prefetchAppBriefInfosQuery = async (
+  queryClient: QueryClient,
+  {
+    appType,
+    offset,
+    limit,
+    sortBy,
+    tagIds,
+    dependAppId,
+  }: {
+    appType: AppType;
+    offset: number;
+    limit: number;
+    sortBy: string;
+    tagIds: Array<number>;
+    dependAppId: number | null;
+  }
+) => {
+  await queryClient.prefetchQuery(
+    ["appBriefInfos", appType, offset, limit, sortBy, tagIds, dependAppId],
+    async () => {
+      const { data } = await baseAxios.get("/app/brief_infos", {
+        params: {
+          type: appType,
+          offset: offset,
+          limit: limit,
+          sort_by: sortBy,
+          tag_ids: tagIds.join(","),
+          depend_app_id: dependAppId,
+        },
+      });
+      return { data };
+    }
   );
 };
 
@@ -174,4 +222,6 @@ export {
   useAppSubscribeStatusQuery,
   useAppSubscribeMutation,
   useAppUnsubscribeMutation,
+  prefetchAppAmountQuery,
+  prefetchAppBriefInfosQuery,
 };

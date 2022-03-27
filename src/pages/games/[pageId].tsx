@@ -14,6 +14,7 @@ import { Update, LockOutlined, LockOpen } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
+import { dehydrate, QueryClient } from "react-query";
 
 import Layout from "src/components/Layout";
 import ImageSkeleton from "src/components/ImageSkeleton";
@@ -27,7 +28,12 @@ import { expToLevel } from "src/utils/exp";
 import { baseAxios } from "src/apis";
 import { Tag } from "src/apis/tag";
 import { useUserInfoQuery } from "src/apis/user";
-import { useAppBriefInfosQuery, useAppAmountQuery } from "src/apis/app";
+import {
+  useAppBriefInfosQuery,
+  useAppAmountQuery,
+  prefetchAppAmountQuery,
+  prefetchAppBriefInfosQuery,
+} from "src/apis/app";
 
 const chipStyle = {
   cursor: "pointer",
@@ -166,28 +172,10 @@ function GameCover({
   );
 }
 
-function GamesPage() {
+function GamesPage({ pageId }: { pageId: number }) {
   const sendSnackbar = useSnackbar();
   const router = useRouter();
   const userId = useStore((store) => store.userId);
-
-  const currentPageFromUrl = useMemo(() => {
-    if (router.query.page) {
-      let page;
-      if (Array.isArray(router.query.page)) {
-        page = parseInt(router.query.page[0]);
-      } else {
-        page = parseInt(router.query.page);
-      }
-      if (page === NaN || page < 1) {
-        router.replace("/404");
-      }
-      return page;
-    } else {
-      return 1;
-    }
-  }, [router]);
-  const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
 
   // 查询API
   const userInfoQuery = useUserInfoQuery(
@@ -214,10 +202,11 @@ function GamesPage() {
   const gameBriefInfosQuery = useAppBriefInfosQuery(
     {
       appType: "game",
-      offset: (currentPage - 1) * ENTRY_NUMBER_PER_PAGE,
+      offset: (pageId - 1) * ENTRY_NUMBER_PER_PAGE,
       limit: ENTRY_NUMBER_PER_PAGE,
       sortBy: "id",
       tagIds: [],
+      dependAppId: null,
     },
     {
       onError: (error) => {
@@ -375,11 +364,10 @@ function GamesPage() {
           <Pagination
             color="primary"
             count={Math.ceil(gameAmount / ENTRY_NUMBER_PER_PAGE)}
-            page={currentPage}
+            page={pageId}
             onChange={(_: any, value: number) => {
-              if (value !== currentPage) {
-                setCurrentPage(value);
-                router.push(`/games?page=${value}`, undefined, {
+              if (value !== pageId) {
+                router.push(`/games/${pageId}`, undefined, {
                   shallow: true,
                 });
               }
@@ -397,14 +385,14 @@ function GamesPage() {
   }
 }
 
-function SeoPage() {
+function SeoPage({ pageId }: { pageId: number }) {
   return (
     <>
       <NextSeo
-        title="游戏库 - IGame"
+        title={`游戏库第${pageId}页 - IGame`}
         description="你一直想要的游戏下载网站，简单，快速且优雅"
       />
-      <GamesPage />
+      <GamesPage pageId={pageId} />
     </>
   );
 }
@@ -420,30 +408,40 @@ export async function getStaticPaths() {
   // Call an external API endpoint to get posts
   const res = await baseAxios.get("/app/amount", { params: { type: "game" } });
   // Get the paths we want to pre-render based on posts
-  if (res.status === 200) {
-    const pageAmount: number = Math.ceil(
-      res.data.amount / ENTRY_NUMBER_PER_PAGE
-    );
-    const paths = [...Array(pageAmount).keys()].map((pageCount) => ({
-      params: { pageId: pageCount + 1 },
-    }));
-    // https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
-    return { paths, fallback: true };
-  } else {
-    return null;
-  }
+  const pageAmount: number = Math.ceil(
+    parseInt(res.data.amount) / ENTRY_NUMBER_PER_PAGE
+  );
+  const paths = [...Array(pageAmount).keys()].map((pageCount) => ({
+    params: { pageId: (pageCount + 1).toString() },
+  }));
+  // https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
+  return { paths, fallback: true };
 }
 
 // https://nextjs.org/docs/api-reference/data-fetching/get-static-props
 export async function getStaticProps({
   params,
 }: {
-  params: { pageId: number };
+  params: { pageId: string };
 }) {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-  const res = await fetch(`https://.../posts/${params.pageId}`);
-  const post = await res.json();
+  const queryClient = new QueryClient();
+  await prefetchAppAmountQuery(queryClient, {
+    appType: "game",
+  });
+  await prefetchAppBriefInfosQuery(queryClient, {
+    appType: "game",
+    offset: (parseInt(params.pageId) - 1) * ENTRY_NUMBER_PER_PAGE,
+    limit: ENTRY_NUMBER_PER_PAGE,
+    sortBy: "id",
+    tagIds: [],
+    dependAppId: null,
+  });
 
-  return { props: { post }, revalidate: 28800 };
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      pageId: parseInt(params.pageId),
+    },
+    revalidate: 28800,
+  };
 }

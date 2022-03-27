@@ -37,7 +37,8 @@ const AccountButton = () => {
   const queryClient = useQueryClient();
   const sendSnackbar = useSnackbar();
   const userId = useStore((store) => store.userId);
-  const setUserId = useStore((store) => store.setUserId);
+  const userLogin = useStore((store) => store.userLogin);
+  const userLogout = useStore((store) => store.userLogout);
 
   const [popperIsOpen, setPopperIsOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -53,9 +54,9 @@ const AccountButton = () => {
         sendSnackbar("获取用户信息失败", errorInfo.content, "error");
         if (errorInfo.code !== 500) {
           // 如果系统没有维护中, 注销用户
-          setAccessToken(null);
-          setRefreshToken(null);
-          setUserId(undefined);
+          setAccessToken(undefined);
+          setRefreshToken(undefined);
+          userLogout();
         }
       },
     }
@@ -317,9 +318,9 @@ const AccountButton = () => {
               }}
               onClick={() => {
                 setPopperIsOpen(false);
-                setUserId(undefined);
-                setAccessToken(null);
-                setRefreshToken(null);
+                setAccessToken(undefined);
+                setRefreshToken(undefined);
+                userLogout();
               }}
             >
               注销

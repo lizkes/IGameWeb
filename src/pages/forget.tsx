@@ -52,7 +52,7 @@ function ForgetPage() {
   const sendSnackbar = useSnackbar();
   const router = useRouter();
   const userId = useStore((store) => store.userId);
-  const setUserId = useStore((store) => store.setUserId);
+  const userLogin = useStore((store) => store.userLogin);
 
   const [countDownIsRunning, setCountDownIsRunning] = useState(false);
 
@@ -196,10 +196,10 @@ function ForgetPage() {
       setTimeout(() => {
         setAccessToken(data.access_token);
         setRefreshToken(data.refresh_token);
-        setUserId(data.user_id);
+        userLogin(data.user_id);
       }, 3000);
     }
-  }, [sendSnackbar, userResetPasswordMutation.data, state, setUserId]);
+  }, [sendSnackbar, userResetPasswordMutation.data, state, userLogin]);
 
   const verifyEmailButtonClick = useCallback(() => {
     if (state.emailIsError) {
