@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: ReactElement }) {
   return (
     <Box minHeight="100vh" display="flex" flexDirection="column">
       <Header />
-      <main style={{ flexGrow: 1 }}>{children}</main>
+      <main style={{ flexGrow: 1, display: "flex" }}>{children}</main>
       <Footer />
     </Box>
   );

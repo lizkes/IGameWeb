@@ -25,7 +25,6 @@ import { ENTRY_NUMBER_PER_PAGE } from "src/variants";
 import { handleAxiosError } from "src/utils/error";
 import { dateFormat, toDate } from "src/utils/time";
 import { expToLevel } from "src/utils/exp";
-import { baseAxios } from "src/apis";
 import { Tag } from "src/apis/tag";
 import { useUserInfoQuery } from "src/apis/user";
 import {
@@ -249,7 +248,7 @@ function GamesPage({ pageId }: { pageId: number }) {
     return (
       <>
         <NextSeo
-          title="正在获取数据 - IGame"
+          title={`游戏库第${pageId}页 - IGame`}
           description="你一直想要的游戏下载网站，简单，快速且优雅"
         />
         <BasePage>
@@ -401,34 +400,15 @@ GamesPage.getLayout = function getLayout(page: ReactElement) {
 
 export default GamesPage;
 
-// https://nextjs.org/docs/basic-features/data-fetching/get-static-paths
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await baseAxios.get("/app/amount", { params: { type: "game" } });
-  // Get the paths we want to pre-render based on posts
-  const pageAmount: number = Math.ceil(
-    parseInt(res.data.amount) / ENTRY_NUMBER_PER_PAGE
-  );
-  const paths = [...Array(pageAmount).keys()].map((pageCount) => ({
-    params: { pageId: (pageCount + 1).toString() },
-  }));
-  // https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
-  return { paths, fallback: true };
-}
-
 // https://nextjs.org/docs/api-reference/data-fetching/get-static-props
-export async function getStaticProps({
-  params,
-}: {
-  params: { pageId: string };
-}) {
+export async function getStaticProps() {
   const queryClient = new QueryClient();
   await prefetchAppAmountQuery(queryClient, {
     appType: "game",
   });
   await prefetchAppBriefInfosQuery(queryClient, {
     appType: "game",
-    offset: (parseInt(params.pageId) - 1) * ENTRY_NUMBER_PER_PAGE,
+    offset: 0,
     limit: ENTRY_NUMBER_PER_PAGE,
     sortBy: "id",
     tagIds: [],
@@ -438,7 +418,7 @@ export async function getStaticProps({
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      pageId: parseInt(params.pageId),
+      pageId: 1,
     },
     revalidate: 28800,
   };

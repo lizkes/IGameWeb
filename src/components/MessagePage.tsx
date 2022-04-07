@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { ErrorOutline, InfoOutlined } from "@mui/icons-material";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { HOME_URL } from "src/variants";
 
@@ -16,14 +16,11 @@ const MessagePage: FC<Props> = ({
   variant = "error",
   returnHomeButton = true,
 }) => {
-  const router = useRouter();
-
   return (
     <Container
       maxWidth="xl"
       sx={{
         padding: "16px",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -38,6 +35,7 @@ const MessagePage: FC<Props> = ({
           width: "100%",
           overflowWrap: "break-word",
           padding: "16px 0",
+          marginBottom: "16px",
           color: (t) =>
             variant === "info" ? t.palette.info.light : t.palette.error.light,
         }}
@@ -46,12 +44,20 @@ const MessagePage: FC<Props> = ({
           <InfoOutlined
             sx={{
               marginRight: "4px",
+              fontSize: {
+                xs: "2rem",
+                lg: "2.6rem",
+              },
             }}
           />
         ) : (
           <ErrorOutline
             sx={{
               marginRight: "4px",
+              fontSize: {
+                xs: "2rem",
+                lg: "2.6rem",
+              },
             }}
           />
         )}
@@ -59,20 +65,20 @@ const MessagePage: FC<Props> = ({
           variant="h1"
           sx={{
             fontSize: {
-              xs: "1.4rem",
-              xl: "1.6rem",
+              xs: "2rem",
+              lg: "2.6rem",
             },
-            lineHeight: "1.6",
-            textAlign: "center",
           }}
         >
           {message}
         </Typography>
       </Box>
       {returnHomeButton ? (
-        <Button variant="contained" onClick={() => router.push(HOME_URL)}>
-          返回主页
-        </Button>
+        <Link href={HOME_URL} passHref>
+          <Button component="a" size="large" variant="contained">
+            返回主页
+          </Button>
+        </Link>
       ) : null}
       <Box sx={{ flexGrow: 3 }} />
     </Container>
