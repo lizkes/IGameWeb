@@ -1,4 +1,4 @@
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
 import { NextSeo } from "next-seo";
 
@@ -86,6 +86,188 @@ function LeftGrid({
   );
 }
 
+const chipStyle = {
+  cursor: "pointer",
+  transition: "all 150ms",
+  "&:hover": {
+    filter: "brightness(75%)",
+  },
+  margin: "0 2px",
+};
+
+type Tag = {
+  tag_id: number;
+  tag_name: string;
+};
+
+type RightGridProps = {
+  tags: Array<Tag>;
+  title: string;
+  description: string;
+  view: number;
+  subscription: number;
+  downloaded: number;
+  image: string;
+  updatedAt: string;
+};
+
+function RightGrid({
+  tags,
+  title,
+  description,
+  view,
+  subscription,
+  downloaded,
+  image,
+  updatedAt,
+}: RightGridProps) {
+  const [rightGridRef, setRightGridRef] = useState<HTMLDivElement | null>(null);
+
+  return (
+    <Grid
+      item
+      ref={(newRef) => setRightGridRef(newRef)}
+      sx={{
+        order: {
+          default: 0,
+          pad: 2,
+        },
+        position: "relative",
+        padding: "0 12px",
+        width: {
+          default: "100%",
+          pad: "30%",
+          tablet: "25%",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          position: {
+            pad: "fixed",
+          },
+          width: {
+            default: "100%",
+            pad: (rightGridRef?.clientWidth ?? 24) - 24,
+          },
+        }}
+      >
+        <ImageSkeleton
+          src={image}
+          alt={title}
+          paddingTop="57.31%"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            rowGap: "2px",
+            margin: "12px 0 0 0",
+          }}
+        >
+          <Box>
+            <Chip
+              sx={chipStyle}
+              icon={<Visibility />}
+              color="secondary"
+              size="small"
+              label={view}
+            />
+            <Chip
+              sx={chipStyle}
+              icon={<Favorite />}
+              color="secondary"
+              size="small"
+              label={subscription}
+            />
+            <Chip
+              sx={chipStyle}
+              icon={<Download />}
+              color="secondary"
+              size="small"
+              label={downloaded}
+            />
+          </Box>
+          <Chip
+            sx={chipStyle}
+            icon={<Update />}
+            color="secondary"
+            size="small"
+            label={dateFormat(toDate(updatedAt))}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "start",
+            flexWrap: "wrap",
+            rowGap: "2px",
+            margin: "6px 0 12px 0",
+          }}
+        >
+          {tags.map((tag) => (
+            <Chip
+              sx={chipStyle}
+              color="primary"
+              size="small"
+              key={tag.tag_id}
+              label={tag.tag_name}
+            />
+          ))}
+        </Box>
+        <HtmlParser variant="description">{description}</HtmlParser>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "16px 0 0 0",
+          }}
+        >
+          <Button
+            variant="contained"
+            size="large"
+            color="success"
+            sx={{
+              width: "100%",
+              marginBottom: "8px",
+            }}
+            onClick={() =>
+              document.querySelector("#ResourceContainer")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "center",
+              })
+            }
+          >
+            下载链接
+          </Button>
+          {variant === "game" ? (
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                backgroundColor: blue[800],
+                transition: "all 150ms",
+                width: "100%",
+                "&:hover": {
+                  filter: "brightness(75%)",
+                  backgroundColor: blue[800],
+                },
+              }}
+              onClick={() => navigate(`${location.pathname}/expansion`)}
+            >
+              相关拓展
+            </Button>
+          ) : null}
+        </Box>
+      </Box>
+    </Grid>
+  );
+}
+
 function GamePage({ gameId }: { gameId: number }) {
   const sendSnackbar = useSnackbar();
 
@@ -96,7 +278,7 @@ function GamePage({ gameId }: { gameId: number }) {
       type: "game",
     },
     {
-      enabled: gameId !== undefined,
+      enabled: gameId !== null,
       onError: (error) => {
         const errorInfo = handleAxiosError(error);
         sendSnackbar("获取游戏详细信息失败", errorInfo.content, "error");
@@ -109,7 +291,7 @@ function GamePage({ gameId }: { gameId: number }) {
     if (appInfoQuery.data) {
       return appInfoQuery.data.data;
     }
-    return undefined;
+    return null;
   }, [appInfoQuery.data]);
 
   // 返回页面
@@ -125,7 +307,7 @@ function GamePage({ gameId }: { gameId: number }) {
         </BasePage>
       </>
     );
-  } else if (appInfo === undefined) {
+  } else if (appInfo === null) {
     // 错误页面
     return (
       <>
@@ -133,7 +315,10 @@ function GamePage({ gameId }: { gameId: number }) {
           title="错误页面"
           description="你一直想要的游戏下载网站，简单，快速且优雅"
         />
-        <MessagePage message="获取游戏详细信息失败" variant="error" />
+        <MessagePage
+          message="获取游戏详细信息失败"
+          variant="error"
+        />
       </>
     );
   } else {

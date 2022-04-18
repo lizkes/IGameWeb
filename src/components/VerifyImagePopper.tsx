@@ -71,7 +71,7 @@ const VerifyImagePopper: FC<Props> = ({
     if (verifyImageNewMutation.data) {
       return verifyImageNewMutation.data.data;
     }
-    return undefined;
+    return null;
   }, [verifyImageNewMutation.data]);
 
   useEffect(() => {
@@ -135,7 +135,10 @@ const VerifyImagePopper: FC<Props> = ({
             height: "168px",
           }}
         >
-          <Box component="img" src={verifyImageNewData?.backgroud_url} />
+          <Box
+            component="img"
+            src={verifyImageNewData?.backgroud_url}
+          />
           <Box
             component="img"
             src={verifyImageNewData?.puzzle_url}

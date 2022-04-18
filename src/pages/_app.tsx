@@ -36,9 +36,9 @@ function MyApp({
   const userId = useStore((store) => store.userId);
   const userLogin = useStore((store) => store.userLogin);
   useEffect(() => {
-    if (userId === undefined) {
+    if (userId === null) {
       const userIdFromToken = getUserIdFromToken();
-      if (userIdFromToken !== undefined) {
+      if (userIdFromToken !== null) {
         userLogin(userIdFromToken);
       }
     }
@@ -47,7 +47,10 @@ function MyApp({
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta
+          name="viewport"
+          content="initial-scale=1, width=device-width"
+        />
       </Head>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline enableColorScheme />

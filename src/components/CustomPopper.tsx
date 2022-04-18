@@ -61,7 +61,10 @@ const CustomPopper: FC<Props> = ({
             transformOrigin: transformOrigin,
           }}
         >
-          <Paper elevation={3} sx={paperSx}>
+          <Paper
+            elevation={3}
+            sx={paperSx}
+          >
             {clickAwayEnable ? (
               <ClickAwayListener onClickAway={closeFn!}>
                 <Box>{children}</Box>

@@ -558,7 +558,10 @@ function RegisterPage() {
               marginBottom: "16px",
             }}
           >
-            <Link href="/login" passHref>
+            <Link
+              href="/login"
+              passHref
+            >
               <MuiLink
                 underline="hover"
                 sx={{

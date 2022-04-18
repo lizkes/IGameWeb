@@ -22,13 +22,9 @@ type SnackbarProps = {
 };
 
 const Snackbar = forwardRef<HTMLDivElement, SnackbarProps>(function Snackbar(
-  { id, title, content, variant },
+  { id, title, content, variant = "info" },
   ref
 ) {
-  if (variant === undefined) {
-    variant = "info";
-  }
-
   const { closeSnackbar } = useNotistackSnackbar();
   const theme = useTheme();
   const breakpointUpMd = useMediaQuery(theme.breakpoints.up("md"), {
@@ -123,7 +119,12 @@ const useSnackbar = () => {
   return (title: string, content?: string, variant?: SnackbarVariant) =>
     enqueueSnackbar(`${title}|${content}`, {
       content: (key, _) => (
-        <Snackbar id={key} title={title} content={content} variant={variant} />
+        <Snackbar
+          id={key}
+          title={title}
+          content={content}
+          variant={variant}
+        />
       ),
       autoHideDuration: variant === "error" ? 7000 : 4000,
       persist: false,

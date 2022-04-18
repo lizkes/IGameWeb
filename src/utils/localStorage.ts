@@ -1,29 +1,29 @@
 import { isValidToken } from "src/utils/token";
 
 // token start
-function getAccessToken(): string | undefined {
+function getAccessToken(): string | null {
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken && isValidToken(accessToken)) {
     return accessToken;
   }
-  return undefined;
+  return null;
 }
-function getRefreshToken(): string | undefined {
+function getRefreshToken(): string | null {
   const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken && isValidToken(refreshToken)) {
     return refreshToken;
   }
-  return undefined;
+  return null;
 }
-function setAccessToken(token?: string) {
-  if (token === undefined) {
+function setAccessToken(token: string | null) {
+  if (token === null) {
     localStorage.removeItem("accessToken");
   } else {
     localStorage.setItem("accessToken", token);
   }
 }
-function setRefreshToken(token?: string) {
-  if (token === undefined) {
+function setRefreshToken(token: string | null) {
+  if (token === null) {
     localStorage.removeItem("refreshToken");
   } else {
     localStorage.setItem("refreshToken", token);

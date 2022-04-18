@@ -27,7 +27,10 @@ const NormalSkeleton: FC<Props> = ({
         backgroundColor: theme.palette.background.default,
       }}
     >
-      <Fade in timeout={timeout}>
+      <Fade
+        in
+        timeout={timeout}
+      >
         <Skeleton
           animation="wave"
           variant="rectangular"

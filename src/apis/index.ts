@@ -29,9 +29,9 @@ const baseAxios = axios.create({
 
 const getAuthAxios = async () => {
   let accessToken = getAccessToken();
-  if (accessToken === undefined) {
+  if (accessToken === null) {
     const refreshToken = getRefreshToken();
-    if (refreshToken === undefined) {
+    if (refreshToken === null) {
       return baseAxios;
     }
 

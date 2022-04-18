@@ -7,12 +7,12 @@ type Store = {
 };
 
 const useStore = create<Store>((set: SetState<Store>) => ({
-  userId: undefined,
+  userId: null,
   userLogin: (userId) => {
     set({ userId: userId });
   },
   userLogout: () => {
-    set({ userId: undefined });
+    set({ userId: null });
   },
 }));
 

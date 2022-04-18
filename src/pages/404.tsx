@@ -29,8 +29,15 @@ function NotFoundPage() {
           页面不存在
         </Typography>
 
-        <Link href={HOME_URL} passHref>
-          <Button component="a" size="large" variant="contained">
+        <Link
+          href={HOME_URL}
+          passHref
+        >
+          <Button
+            component="a"
+            size="large"
+            variant="contained"
+          >
             返回主页
           </Button>
         </Link>

@@ -32,7 +32,10 @@ const ImageSkeleton: FC<Props> = ({
         backgroundColor: theme.palette.background.default,
       }}
     >
-      <Fade in={imageLoaded} timeout={timeout}>
+      <Fade
+        in={imageLoaded}
+        timeout={timeout}
+      >
         <div
           style={{
             position: "absolute",
@@ -54,7 +57,10 @@ const ImageSkeleton: FC<Props> = ({
           />
         </div>
       </Fade>
-      <Fade in={!imageLoaded} timeout={timeout}>
+      <Fade
+        in={!imageLoaded}
+        timeout={timeout}
+      >
         <Skeleton
           animation="wave"
           variant="rectangular"

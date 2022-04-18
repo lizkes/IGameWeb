@@ -9,7 +9,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang="zh-CN">
         <Head>
-          <meta name="theme-color" content={darkTheme.palette.primary.main} />
+          <meta
+            name="theme-color"
+            content={darkTheme.palette.primary.main}
+          />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
           {(this.props as any).emotionStyleTags}
         </Head>
@@ -58,7 +61,12 @@ MyDocument.getInitialProps = async (ctx) => {
     originalRenderPage({
       enhanceApp: (App: any) =>
         function EnhanceApp(props) {
-          return <App emotionCache={cache} {...props} />;
+          return (
+            <App
+              emotionCache={cache}
+              {...props}
+            />
+          );
         },
     });
 

@@ -84,7 +84,11 @@ function GameCover({
             paddingTop: "150%",
           }}
         >
-          <Image src={src} alt={title} layout="fill" />
+          <Image
+            src={src}
+            alt={title}
+            layout="fill"
+          />
         </div>
         <CardContent
           sx={{
@@ -188,7 +192,7 @@ function GamesPage({ pageId }: { pageId: number }) {
   const userInfoQuery = useUserInfoQuery(
     { userId: userId! },
     {
-      enabled: userId !== undefined,
+      enabled: userId !== null,
       onError: (error) => {
         const errorInfo = handleAxiosError(error);
         sendSnackbar("获取用户信息失败", errorInfo.content, "error");
@@ -233,13 +237,13 @@ function GamesPage({ pageId }: { pageId: number }) {
     if (gameAmountQuery.data) {
       return gameAmountQuery.data.data.amount;
     }
-    return undefined;
+    return null;
   }, [gameAmountQuery.data]);
   const gameBriefInfos = useMemo(() => {
     if (gameBriefInfosQuery.data) {
       return gameBriefInfosQuery.data.data;
     }
-    return undefined;
+    return null;
   }, [gameBriefInfosQuery.data]);
 
   // 返回页面
@@ -295,7 +299,7 @@ function GamesPage({ pageId }: { pageId: number }) {
         </BasePage>
       </>
     );
-  } else if (gameBriefInfos === undefined) {
+  } else if (gameBriefInfos === null) {
     // 错误页面
     return (
       <>
@@ -303,7 +307,10 @@ function GamesPage({ pageId }: { pageId: number }) {
           title="错误页面"
           description="你一直想要的游戏下载网站，简单，快速且优雅"
         />
-        <MessagePage message="获取游戏封面失败" variant="error" />
+        <MessagePage
+          message="获取游戏封面失败"
+          variant="error"
+        />
       </>
     );
   } else {
@@ -368,7 +375,7 @@ function GamesPage({ pageId }: { pageId: number }) {
               </Grid>
             ))}
           </Grid>
-          {gameAmount === undefined ? null : (
+          {gameAmount === null ? null : (
             <Pagination
               color="primary"
               count={Math.ceil(gameAmount / ENTRY_NUMBER_PER_PAGE)}

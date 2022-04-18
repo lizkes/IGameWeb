@@ -9,10 +9,17 @@ export default function HeaderDrawer() {
 
   return (
     <>
-      <IconButton aria-label="菜单" onClick={() => setOpen(!open)}>
+      <IconButton
+        aria-label="菜单"
+        onClick={() => setOpen(!open)}
+      >
         <MenuIcon />
       </IconButton>
-      <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={() => setOpen(false)}
+      >
         <Box
           role="presentation"
           onClick={() => setOpen(false)}
@@ -35,7 +42,10 @@ export default function HeaderDrawer() {
             <SearchIcon sx={{ mr: 1 }} />
             搜索 IGame
           </Button>
-          <Link href="/login" passHref>
+          <Link
+            href="/login"
+            passHref
+          >
             <Button
               component="a"
               variant="outlined"
@@ -45,8 +55,15 @@ export default function HeaderDrawer() {
               登陆
             </Button>
           </Link>
-          <Link href="/register" passHref>
-            <Button component="a" variant="contained" size="large">
+          <Link
+            href="/register"
+            passHref
+          >
+            <Button
+              component="a"
+              variant="contained"
+              size="large"
+            >
               注册
             </Button>
           </Link>

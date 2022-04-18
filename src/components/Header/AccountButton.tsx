@@ -48,14 +48,14 @@ const AccountButton = () => {
       userId: userId!,
     },
     {
-      enabled: userId !== undefined && popperIsOpen,
+      enabled: userId !== null && popperIsOpen,
       onError: (error) => {
         const errorInfo = handleAxiosError(error);
         sendSnackbar("获取用户信息失败", errorInfo.content, "error");
         if (errorInfo.code !== 500) {
           // 如果系统没有维护中, 注销用户
-          setAccessToken(undefined);
-          setRefreshToken(undefined);
+          setAccessToken(null);
+          setRefreshToken(null);
           userLogout();
         }
       },
@@ -102,7 +102,10 @@ const AccountButton = () => {
   // 返回页面
   return (
     <>
-      <FlashingBadge color={userId ? green[600] : red.A700} animation={true}>
+      <FlashingBadge
+        color={userId ? green[600] : red.A700}
+        animation={true}
+      >
         <IconButton
           ref={anchorRef}
           onClick={() => {
@@ -139,7 +142,10 @@ const AccountButton = () => {
         transformOrigin="right top"
       >
         {userInfoQuery.isLoading ? (
-          <NormalSkeleton width="228px" height="356px" />
+          <NormalSkeleton
+            width="228px"
+            height="356px"
+          />
         ) : userInfo ? (
           <Box
             sx={{
@@ -195,7 +201,10 @@ const AccountButton = () => {
                 </Typography>
               ) : null}
             </Box>
-            <Link href="/buy/vip" passHref>
+            <Link
+              href="/buy/vip"
+              passHref
+            >
               <Button
                 fullWidth
                 component="a"
@@ -318,8 +327,8 @@ const AccountButton = () => {
               }}
               onClick={() => {
                 setPopperIsOpen(false);
-                setAccessToken(undefined);
-                setRefreshToken(undefined);
+                setAccessToken(null);
+                setRefreshToken(null);
                 userLogout();
               }}
             >
@@ -338,7 +347,10 @@ const AccountButton = () => {
                   marginRight: "16px",
                 }}
               >
-                <Visibility color="primary" sx={{ marginRight: "4px" }} />
+                <Visibility
+                  color="primary"
+                  sx={{ marginRight: "4px" }}
+                />
                 <Typography>浏览限制资源</Typography>
               </Box>
               <Box
@@ -346,7 +358,10 @@ const AccountButton = () => {
                   display: "flex",
                 }}
               >
-                <Download color="primary" sx={{ marginRight: "4px" }} />
+                <Download
+                  color="primary"
+                  sx={{ marginRight: "4px" }}
+                />
                 <Typography>下载付费资源</Typography>
               </Box>
             </Box>
@@ -357,7 +372,10 @@ const AccountButton = () => {
                   marginRight: "16px",
                 }}
               >
-                <Sync color="primary" sx={{ marginRight: "4px" }} />
+                <Sync
+                  color="primary"
+                  sx={{ marginRight: "4px" }}
+                />
                 <Typography>同步活动记录</Typography>
               </Box>
               <Box
@@ -365,11 +383,17 @@ const AccountButton = () => {
                   display: "flex",
                 }}
               >
-                <Favorite color="primary" sx={{ marginRight: "4px" }} />
+                <Favorite
+                  color="primary"
+                  sx={{ marginRight: "4px" }}
+                />
                 <Typography>获取订阅更新</Typography>
               </Box>
             </Box>
-            <Link href="/login" passHref>
+            <Link
+              href="/login"
+              passHref
+            >
               <Button
                 fullWidth
                 component="a"
@@ -385,7 +409,10 @@ const AccountButton = () => {
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Typography>
                 首次使用？
-                <Link href="/register" passHref>
+                <Link
+                  href="/register"
+                  passHref
+                >
                   <MuiLink
                     underline="hover"
                     sx={{

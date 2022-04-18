@@ -334,7 +334,10 @@ function LoginPage() {
               marginBottom: "16px",
             }}
           >
-            <Link href="/forget" passHref>
+            <Link
+              href="/forget"
+              passHref
+            >
               <MuiLink
                 underline="hover"
                 sx={{
@@ -345,7 +348,10 @@ function LoginPage() {
                 忘记密码?
               </MuiLink>
             </Link>
-            <Link href="/register" passHref>
+            <Link
+              href="/register"
+              passHref
+            >
               <MuiLink
                 underline="hover"
                 sx={{

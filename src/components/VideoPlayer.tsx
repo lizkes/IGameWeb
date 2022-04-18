@@ -3,4 +3,9 @@ import videojs from "video.js";
 
 import "video.js/dist/video-js.css";
 
-const VideoPlayer = ()
+type Props = {
+  options: any;
+  onReady: any;
+};
+
+const VideoPlayer = ({ options, onReady }: Props) => {};

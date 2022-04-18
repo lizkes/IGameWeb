@@ -28,12 +28,12 @@ function isValidToken(token: string): boolean {
   return true;
 }
 
-function getUserIdFromToken(): number | undefined {
+function getUserIdFromToken(): number | null {
   const refreshToken = getRefreshToken();
   if (refreshToken) {
     return parseJwt(refreshToken).user_id;
   }
-  return undefined;
+  return null;
 }
 
 export { parseJwt, isValidToken, getUserIdFromToken };

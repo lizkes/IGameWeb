@@ -49,8 +49,15 @@ export default function BigHeader() {
               </Box>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
-            <Link href="/register" passHref>
-              <Button component="a" sx={{ mr: 1 }} variant="contained">
+            <Link
+              href="/register"
+              passHref
+            >
+              <Button
+                component="a"
+                sx={{ mr: 1 }}
+                variant="contained"
+              >
                 注册
               </Button>
             </Link>

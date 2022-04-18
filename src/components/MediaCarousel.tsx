@@ -3,6 +3,7 @@ import { useSwipeable } from "react-swipeable";
 import { Box, Backdrop, Slide } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { NavigateBefore, NavigateNext, PlayArrow } from "@mui/icons-material";
+import Image from "next/image";
 
 interface Props {
   medias: Array<Media>;
@@ -50,11 +51,11 @@ const MediaCarousel: FC<Props> = ({ timeout = 300, medias }) => {
 
   const videoMediaItems = useMemo(
     () =>
-      videoMedias.map((videoMedia, index) => (
+      videoMedias.map((video, index) => (
         <VimePlayer
-          key={`mediaItem${index}`}
-          src={videoMedia.contentUrl}
-          poster={videoMedia.thumbUrl}
+          key={`video${index}`}
+          src={video.contentUrl}
+          poster={video.thumbUrl}
           hlsOptions={{
             maxBufferLength: 30,
           }}
@@ -68,25 +69,45 @@ const MediaCarousel: FC<Props> = ({ timeout = 300, medias }) => {
 
   const imageMediaItems = useMemo(
     () =>
-      imageMedias.map((imageMedia, index) => (
-        <ImageSkeleton
-          key={`mediaItem${index}`}
-          src={imageMedia.contentUrl}
-          paddingTop="56.25%"
+      imageMedias.map((image, index) => (
+        <div
+          key={`image${index}`}
+          style={{
+            position: "relative",
+            width: "100%",
+            paddingTop: "56.25%",
+          }}
           onClick={() => {
-            setBackdropImage(imageMedia.contentUrl);
+            setBackdropImage(image.contentUrl);
             setBackdropOpen(true);
           }}
-        />
+        >
+          <Image
+            src={image.contentUrl}
+            alt={`图片${index}`}
+            layout="fill"
+          />
+        </div>
       )),
     [imageMedias]
   );
   const thumbItem = useMemo(
     () =>
-      medias.map((media, index) => (
-        <Box key={`thumbItem${index}`} id={`thumbItem${index}`}>
-          <ImageSkeleton src={media.thumbUrl} paddingTop="56.25%" />
-        </Box>
+      medias.map((thumb, index) => (
+        <div
+          key={`thumb${index}`}
+          style={{
+            position: "relative",
+            width: "100%",
+            paddingTop: "56.25%",
+          }}
+        >
+          <Image
+            src={thumb.thumbUrl}
+            alt={`封面${index}`}
+            layout="fill"
+          />
+        </div>
       )),
     [medias]
   );
