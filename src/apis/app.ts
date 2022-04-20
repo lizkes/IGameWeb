@@ -11,16 +11,19 @@ type Tag = {
   tag_id: number;
   tag_name: string;
 };
-type AppType = "game" | "expansion";
 
-type ArticleAmountQueryData = {
+type AppType = "game" | "expansion";
+type AppAmountQueryArg = {
+  appType: AppType;
+};
+type AppAmountQueryData = {
   amount: number;
 };
 const useAppAmountQuery = (
-  { appType }: { appType: AppType },
-  options?: ApiQueryOptions<ArticleAmountQueryData>
+  { appType }: AppAmountQueryArg,
+  options?: ApiQueryOptions<AppAmountQueryData>
 ) => {
-  return useQuery<AxiosResponse<ArticleAmountQueryData, any>, AxiosError>(
+  return useQuery<AxiosResponse<AppAmountQueryData, any>, AxiosError>(
     ["appAmount", appType],
     () => {
       return baseAxios.get("/app/amount", {
@@ -30,10 +33,9 @@ const useAppAmountQuery = (
     options
   );
 };
-
 const prefetchAppAmountQuery = async (
   queryClient: QueryClient,
-  { appType }: { appType: AppType }
+  { appType }: AppAmountQueryArg
 ) => {
   await queryClient.prefetchQuery(["appAmount", appType], async () => {
     const { data } = await baseAxios.get("/app/amount", {
@@ -43,7 +45,15 @@ const prefetchAppAmountQuery = async (
   });
 };
 
-type AppBriefInfo = {
+type AppBriefInfosQueryArg = {
+  appType: AppType;
+  offset: number;
+  limit: number;
+  sortBy: string;
+  tagIds: Array<number>;
+  dependAppId: number | null;
+};
+type AppBriefInfosQueryData = Array<{
   id: number;
   type: AppType;
   app_id: number;
@@ -56,8 +66,7 @@ type AppBriefInfo = {
   vertical_image: string;
   horizontal_image: string;
   updated_at: string;
-};
-type AppBriefInfosQueryData = Array<AppBriefInfo>;
+}>;
 const useAppBriefInfosQuery = (
   {
     appType,
@@ -66,14 +75,7 @@ const useAppBriefInfosQuery = (
     sortBy,
     tagIds,
     dependAppId,
-  }: {
-    appType: AppType;
-    offset: number;
-    limit: number;
-    sortBy: string;
-    tagIds: Array<number>;
-    dependAppId: number | null;
-  },
+  }: AppBriefInfosQueryArg,
   options?: ApiQueryOptions<AppBriefInfosQueryData>
 ) => {
   return useQuery<AxiosResponse<AppBriefInfosQueryData, any>, AxiosError>(
@@ -93,24 +95,9 @@ const useAppBriefInfosQuery = (
     options
   );
 };
-
 const prefetchAppBriefInfosQuery = async (
   queryClient: QueryClient,
-  {
-    appType,
-    offset,
-    limit,
-    sortBy,
-    tagIds,
-    dependAppId,
-  }: {
-    appType: AppType;
-    offset: number;
-    limit: number;
-    sortBy: string;
-    tagIds: Array<number>;
-    dependAppId: number | null;
-  }
+  { appType, offset, limit, sortBy, tagIds, dependAppId }: AppBriefInfosQueryArg
 ) => {
   await queryClient.prefetchQuery(
     ["appBriefInfos", appType, offset, limit, sortBy, tagIds, dependAppId],
@@ -130,6 +117,7 @@ const prefetchAppBriefInfosQuery = async (
   );
 };
 
+type AppInfoQueryArg = { id?: number; type?: AppType; appId?: number };
 type AppInfoQueryData = {
   id: number;
   type: AppType;
@@ -152,14 +140,13 @@ type AppInfoQueryData = {
   updated_at: string;
 };
 const useAppInfoQuery = (
-  { id, type, appId }: { id?: number; type?: AppType; appId?: number },
+  { id, type, appId }: AppInfoQueryArg,
   options?: ApiQueryOptions<AppInfoQueryData>
 ) => {
   return useQuery<AxiosResponse<AppInfoQueryData, any>, AxiosError>(
     ["appInfo", id, type, appId],
     async () => {
-      const authAxios = await getAuthAxios();
-      return authAxios.get("/app/info", {
+      return baseAxios.get("/app/info", {
         params: {
           id: id,
           type: type,
@@ -169,6 +156,21 @@ const useAppInfoQuery = (
     },
     options
   );
+};
+const prefetchAppInfoQuery = async (
+  queryClient: QueryClient,
+  { id, type, appId }: AppInfoQueryArg
+) => {
+  await queryClient.prefetchQuery(["appInfo", id, type, appId], async () => {
+    const { data } = await baseAxios.get("/app/info", {
+      params: {
+        id: id,
+        type: type,
+        app_id: appId,
+      },
+    });
+    return { data };
+  });
 };
 
 type AppSubscribeStatusQueryData = {
@@ -224,4 +226,5 @@ export {
   useAppUnsubscribeMutation,
   prefetchAppAmountQuery,
   prefetchAppBriefInfosQuery,
+  prefetchAppInfoQuery,
 };

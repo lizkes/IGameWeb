@@ -32,7 +32,7 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page);
   const [queryClient] = useState(() => new QueryClient());
 
-  // set user state from server if localstorage has token
+  // set user state if localstorage has token
   const userId = useStore((store) => store.userId);
   const userLogin = useStore((store) => store.userLogin);
   useEffect(() => {

@@ -1,7 +1,7 @@
 import create, { SetState } from "zustand";
 
 type Store = {
-  userId?: number;
+  userId: number | null;
   userLogin: (userId: number) => void;
   userLogout: () => void;
 };

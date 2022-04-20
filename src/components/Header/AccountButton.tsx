@@ -37,7 +37,6 @@ const AccountButton = () => {
   const queryClient = useQueryClient();
   const sendSnackbar = useSnackbar();
   const userId = useStore((store) => store.userId);
-  const userLogin = useStore((store) => store.userLogin);
   const userLogout = useStore((store) => store.userLogout);
 
   const [popperIsOpen, setPopperIsOpen] = useState(false);

@@ -126,7 +126,7 @@ const useSnackbar = () => {
           variant={variant}
         />
       ),
-      autoHideDuration: variant === "error" ? 7000 : 4000,
+      autoHideDuration: variant === "error" ? 5000 : 3000,
       persist: false,
     });
 };

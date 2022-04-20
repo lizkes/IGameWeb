@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState, FC } from "react";
-import ReactMarkdown from "react-markdown";
+import { useEffect, useRef, useState } from "react";
 import { Box, ButtonBase, Typography } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 
+import MarkdownParser from "src/components/MarkdownParser";
+
 type Props = {
-  markdown: string;
+  children: string;
 };
 
-const MarkDownContentBox: FC<Props> = ({ markdown }) => {
+function MarkdownOverflowBox({ children }: Props) {
   const parserRef = useRef<HTMLDivElement>(null);
   const [parserOverHeight, setParserOverHeight] = useState(false);
   const [parserCollpsed, setParserCollpsed] = useState(false);
@@ -20,7 +21,7 @@ const MarkDownContentBox: FC<Props> = ({ markdown }) => {
         setParserCollpsed(true);
       }
     }
-  }, [markdown]);
+  }, [children]);
 
   return (
     <Box
@@ -39,7 +40,7 @@ const MarkDownContentBox: FC<Props> = ({ markdown }) => {
           flexDirection: "column",
         }}
       >
-        <ReactMarkdown>{markdown}</ReactMarkdown>
+        <MarkdownParser>{children}</MarkdownParser>
       </Box>
       <Box
         sx={{
@@ -84,6 +85,6 @@ const MarkDownContentBox: FC<Props> = ({ markdown }) => {
       </ButtonBase>
     </Box>
   );
-};
+}
 
-export default MarkDownContentBox;
+export default MarkdownOverflowBox;

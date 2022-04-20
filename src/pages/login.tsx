@@ -161,7 +161,7 @@ function LoginPage() {
 
   // 如果用户已登录，重定向到主页
   useEffect(() => {
-    if (userId) {
+    if (userId !== null) {
       router.replace(HOME_URL);
     }
   }, [userId, router]);

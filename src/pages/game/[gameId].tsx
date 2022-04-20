@@ -1,14 +1,20 @@
 import { ReactElement, useMemo, useState } from "react";
-import { Grid, Typography, Divider } from "@mui/material";
+import { dehydrate, QueryClient } from "react-query";
+import { Grid, Typography, Divider, Button, Box, Chip } from "@mui/material";
+import { Update, Visibility, Favorite, Download } from "@mui/icons-material";
 import { NextSeo } from "next-seo";
 
-import { useAppInfoQuery } from "src/apis/app";
+import { baseAxios } from "src/apis";
+import { useAppInfoQuery, prefetchAppInfoQuery } from "src/apis/app";
 import { handleAxiosError } from "src/utils/error";
-import { useSnackbar } from "src/hooks";
+import { dateFormat, toDate } from "src/utils/time";
 import NormalSkeleton from "src/components/NormalSkeleton";
 import Layout from "src/components/Layout";
 import BasePage from "src/components/BasePage";
-import MessagePage from "src/components/MessagePage";
+import ErrorPage from "src/components/ErrorPage";
+import MediaCarousel, { Media } from "src/components/MediaCarousel";
+import MarkdownOverflowBox from "src/components/MarkdownOverflowBox";
+import MarkdownParser from "src/components/MarkdownParser";
 
 type LeftGridProps = {
   appId: number;
@@ -26,18 +32,18 @@ function LeftGrid({
   contentVideoThumbs,
 }: LeftGridProps) {
   const medias = useMemo(() => {
-    const m = [];
+    const m: Array<Media> = [];
     for (const [index, video] of contentVideos.entries()) {
       m.push({
         type: "video",
-        contentUrl: video,
+        mediaUrl: video,
         thumbUrl: contentVideoThumbs[index],
       });
     }
     for (const image of contentImages) {
       m.push({
         type: "image",
-        contentUrl: image,
+        mediaUrl: image,
         thumbUrl: image,
       });
     }
@@ -75,7 +81,7 @@ function LeftGrid({
           margin: "24px 0",
         }}
       />
-      <HTMLContentBox>{content}</HTMLContentBox>
+      <MarkdownOverflowBox>{content}</MarkdownOverflowBox>
       <Divider
         sx={{
           margin: "16px 0 24px 0",
@@ -216,7 +222,7 @@ function RightGrid({
             />
           ))}
         </Box>
-        <HtmlParser variant="description">{description}</HtmlParser>
+        <MarkdownParser>{description}</MarkdownParser>
         <Box
           sx={{
             width: "100%",
@@ -244,24 +250,22 @@ function RightGrid({
           >
             下载链接
           </Button>
-          {variant === "game" ? (
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
+          <Button
+            variant="contained"
+            size="large"
+            sx={{
+              backgroundColor: blue[800],
+              transition: "all 150ms",
+              width: "100%",
+              "&:hover": {
+                filter: "brightness(75%)",
                 backgroundColor: blue[800],
-                transition: "all 150ms",
-                width: "100%",
-                "&:hover": {
-                  filter: "brightness(75%)",
-                  backgroundColor: blue[800],
-                },
-              }}
-              onClick={() => navigate(`${location.pathname}/expansion`)}
-            >
-              相关拓展
-            </Button>
-          ) : null}
+              },
+            }}
+            onClick={() => navigate(`${location.pathname}/expansion`)}
+          >
+            相关拓展
+          </Button>
         </Box>
       </Box>
     </Grid>
@@ -269,37 +273,26 @@ function RightGrid({
 }
 
 function GamePage({ gameId }: { gameId: number }) {
-  const sendSnackbar = useSnackbar();
+  // 查询API
+  const gameInfoQuery = useAppInfoQuery({
+    id: gameId,
+    type: "game",
+  });
 
-  // 获取指定app信息
-  const appInfoQuery = useAppInfoQuery(
-    {
-      id: gameId,
-      type: "game",
-    },
-    {
-      enabled: gameId !== null,
-      onError: (error) => {
-        const errorInfo = handleAxiosError(error);
-        sendSnackbar("获取游戏详细信息失败", errorInfo.content, "error");
-      },
-    }
-  );
-
-  // 处理获取数据
-  const appInfo = useMemo(() => {
-    if (appInfoQuery.data) {
-      return appInfoQuery.data.data;
+  // 处理API数据
+  const gameInfo = useMemo(() => {
+    if (gameInfoQuery.data) {
+      return gameInfoQuery.data.data;
     }
     return null;
-  }, [appInfoQuery.data]);
+  }, [gameInfoQuery.data]);
 
-  // 返回页面
-  if (appInfoQuery.isLoading) {
+  if (gameInfoQuery.isLoading) {
+    // 等待页面
     return (
       <>
         <NextSeo
-          title="正在获取数据 - IGame"
+          title="正在加载 - IGame"
           description="你一直想要的游戏下载网站，简单，快速且优雅"
         />
         <BasePage>
@@ -307,25 +300,19 @@ function GamePage({ gameId }: { gameId: number }) {
         </BasePage>
       </>
     );
-  } else if (appInfo === null) {
+  } else if (gameInfoQuery.isError) {
     // 错误页面
     return (
-      <>
-        <NextSeo
-          title="错误页面"
-          description="你一直想要的游戏下载网站，简单，快速且优雅"
-        />
-        <MessagePage
-          message="获取游戏详细信息失败"
-          variant="error"
-        />
-      </>
+      <ErrorPage
+        message="获取游戏详细信息失败"
+        reason={handleAxiosError(gameInfoQuery.error).content}
+      />
     );
   } else {
     return (
       <>
         <NextSeo
-          title={`${appInfo.name} - IGame`}
+          title={`${gameInfo!.name} - IGame`}
           description="你一直想要的游戏下载网站，简单，快速且优雅"
         />
         <BasePage>
@@ -347,7 +334,7 @@ function GamePage({ gameId }: { gameId: number }) {
               },
             }}
           >
-            {appInfo.name}
+            {gameInfo!.name}
           </Typography>
           <Divider
             sx={{
@@ -368,21 +355,21 @@ function GamePage({ gameId }: { gameId: number }) {
             }}
           >
             <LeftGrid
-              appId={appInfo.app_id}
-              content={appInfo.long_description}
-              contentImages={appInfo.content_images}
-              contentVideos={appInfo.content_videos}
-              contentVideoThumbs={appInfo.content_video_thumbs}
+              appId={gameInfo!.app_id}
+              content={gameInfo!.long_description}
+              contentImages={gameInfo!.content_images}
+              contentVideos={gameInfo!.content_videos}
+              contentVideoThumbs={gameInfo!.content_video_thumbs}
             />
             <RightGrid
-              tags={appInfo.tags}
-              title={appInfo.name}
-              description={appInfo.short_description}
-              view={appInfo.viewed}
-              subscription={appInfo.subscribed}
-              downloaded={appInfo.downloaded}
-              image={appInfo.horizontal_image}
-              updatedAt={appInfo.updated_at}
+              tags={gameInfo!.tags}
+              title={gameInfo!.name}
+              description={gameInfo!.short_description}
+              view={gameInfo!.viewed}
+              subscription={gameInfo!.subscribed}
+              downloaded={gameInfo!.downloaded}
+              image={gameInfo!.horizontal_image}
+              updatedAt={gameInfo!.updated_at}
             />
           </Grid>
         </BasePage>
@@ -396,3 +383,35 @@ GamePage.getLayout = function getLayout(page: ReactElement) {
 };
 
 export default GamePage;
+
+// https://nextjs.org/docs/basic-features/data-fetching/get-static-paths
+export async function getStaticPaths() {
+  // Call an external API endpoint to get posts
+  const res = await baseAxios.get("/app/amount", { params: { type: "game" } });
+  const paths = [...Array(res.data.amount).keys()].map((gameCount) => ({
+    params: { gameId: (gameCount + 1).toString() },
+  }));
+  // https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
+  return { paths, fallback: true };
+}
+
+// https://nextjs.org/docs/api-reference/data-fetching/get-static-props
+export async function getStaticProps({
+  params,
+}: {
+  params: { gameId: string };
+}) {
+  const queryClient = new QueryClient();
+  await prefetchAppInfoQuery(queryClient, {
+    id: parseInt(params.gameId),
+    type: "game",
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      gameId: parseInt(params.gameId),
+    },
+    revalidate: 28800,
+  };
+}
