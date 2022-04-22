@@ -70,6 +70,8 @@ type ResourceInfoQueryData = {
   description: string;
   allowed_exp: number;
   downloaded: number;
+  normal_download_cost: number;
+  fast_download_cost: number;
   can_normal_download: boolean;
   can_fast_download: boolean;
   require_systems: Array<number>;

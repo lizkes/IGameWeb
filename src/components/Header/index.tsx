@@ -4,7 +4,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import BigHeader from "./BigHeader";
 import SmallHeader from "./SmallHeader";
 
-export default function Header() {
+function Header() {
   const theme = useTheme();
   const gtSm = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -14,3 +14,5 @@ export default function Header() {
     return <SmallHeader />;
   }
 }
+
+export default Header;

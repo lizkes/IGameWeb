@@ -1,11 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
 import { AppBar, Box, Container, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Search as SearchIcon } from "@mui/icons-material";
+import Image from "next/image";
+import Link from "next/link";
 
 import { HOME_URL } from "src/variants";
-import HideOnScroll from "src/components/HideOnScroll";
+import { HideOnScroll } from "src/components";
 
 import AccountButton from "./AccountButton";
 

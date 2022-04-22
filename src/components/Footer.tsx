@@ -1,5 +1,6 @@
-import { Container, Typography, Link as MuiLink, Box } from "@mui/material";
-import Link from "next/link";
+import { Container, Typography, Box } from "@mui/material";
+
+import { MuiLink } from "src/components";
 
 export default function Footer() {
   return (
@@ -12,37 +13,25 @@ export default function Footer() {
         <Box flexGrow="1">
           <Typography>
             获取更多免费游戏跟丰富MOD，请访问
-            <Link
+            <MuiLink
               href="https://share.igame.ml"
-              passHref
+              target="_blank"
+              rel="noopener"
             >
-              <MuiLink
-                color="secondary"
-                underline="hover"
-                target="_blank"
-                rel="noopener"
-              >
-                IGame资源站
-              </MuiLink>
-            </Link>
+              IGame资源站
+            </MuiLink>
           </Typography>
         </Box>
         <Box flexGrow="1">
           <Typography>
             与其他同好交流，有问题询问作者，请加入
-            <Link
+            <MuiLink
               href="https://jq.qq.com/?_wv=1027&k=vH1V9RF1"
-              passHref
+              target="_blank"
+              rel="noopener"
             >
-              <MuiLink
-                color="secondary"
-                underline="hover"
-                target="_blank"
-                rel="noopener"
-              >
-                IGame交流群
-              </MuiLink>
-            </Link>
+              IGame资源站
+            </MuiLink>
           </Typography>
         </Box>
       </Container>

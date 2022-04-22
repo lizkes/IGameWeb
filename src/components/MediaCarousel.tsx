@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import { NavigateBefore, NavigateNext, PlayArrow } from "@mui/icons-material";
 import Image from "next/image";
 
-import VideoPlayer from "src/components/VideoPlayer";
+import { VideoPlayer } from "src/components";
 
 interface Props {
   medias: Array<Media>;

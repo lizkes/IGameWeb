@@ -1,8 +1,9 @@
 import * as React from "react";
-import Link from "next/link";
 import { IconButton, Button, Drawer, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+
+import { MuiLinkButton } from "src/components";
 
 export default function HeaderDrawer() {
   const [open, setOpen] = React.useState(false);
@@ -42,31 +43,21 @@ export default function HeaderDrawer() {
             <SearchIcon sx={{ mr: 1 }} />
             搜索 IGame
           </Button>
-          <Link
+          <MuiLinkButton
             href="/login"
-            passHref
+            variant="outlined"
+            size="large"
+            style={{ marginBottom: "12px" }}
           >
-            <Button
-              component="a"
-              variant="outlined"
-              size="large"
-              sx={{ mb: "12px" }}
-            >
-              登陆
-            </Button>
-          </Link>
-          <Link
+            登陆
+          </MuiLinkButton>
+          <MuiLinkButton
             href="/register"
-            passHref
+            variant="contained"
+            size="large"
           >
-            <Button
-              component="a"
-              variant="contained"
-              size="large"
-            >
-              注册
-            </Button>
-          </Link>
+            注册
+          </MuiLinkButton>
         </Box>
       </Drawer>
     </>

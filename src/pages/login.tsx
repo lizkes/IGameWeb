@@ -16,21 +16,19 @@ import {
   InputAdornment,
   Container,
   Typography,
-  Link as MuiLink,
   Box,
   FormHelperText,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { NextSeo } from "next-seo";
 
 import { useSnackbar, useStore } from "src/hooks";
 import { useUserLoginMutation } from "src/apis/user";
 import { handleAxiosError } from "src/utils/error";
 import { setAccessToken, setRefreshToken } from "src/utils/localStorage";
-import VerifyImagePopper from "src/components/VerifyImagePopper";
+import { VerifyImagePopper, MuiLink } from "src/components";
 import { HOME_URL } from "src/variants";
 
 type BaseState = {
@@ -47,7 +45,9 @@ function LoginPage() {
   const sendSnackbar = useSnackbar();
   const router = useRouter();
   const userId = useStore((store) => store.userId);
-  const userLogin = useStore((store) => store.userLogin);
+  const setUserId = useStore((store) => store.setUserId);
+  const fromUrl = useStore((store) => store.fromUrl);
+  const setFromUrl = useStore((store) => store.setFromUrl);
 
   const [state, setState] = useState<BaseState>({
     emailIsError: false,
@@ -114,6 +114,7 @@ function LoginPage() {
       }
     }
   }, [sendSnackbar, state, userLoginMutation.error]);
+
   // 处理响应
   useEffect(() => {
     if (userLoginMutation.data && !state.userLoginRspIsHandled) {
@@ -124,9 +125,21 @@ function LoginPage() {
       const data = userLoginMutation.data.data;
       setAccessToken(data.access_token);
       setRefreshToken(data.refresh_token);
-      userLogin(data.user_id);
+      setUserId(data.user_id);
     }
-  }, [userLogin, state, userLoginMutation.data]);
+  }, [setUserId, state, userLoginMutation.data]);
+
+  // 如果用户已登录，重定向
+  useEffect(() => {
+    if (userId !== null) {
+      if (fromUrl !== null) {
+        setFromUrl(null);
+        router.replace(fromUrl);
+      } else {
+        router.replace(HOME_URL);
+      }
+    }
+  }, [userId, router, fromUrl, setFromUrl]);
 
   const loginButtonClick = useCallback(() => {
     if (state.emailIsError) {
@@ -158,13 +171,6 @@ function LoginPage() {
       });
     }
   }, [emailRegexp, passwordRegexp, state, userLoginMutation]);
-
-  // 如果用户已登录，重定向到主页
-  useEffect(() => {
-    if (userId !== null) {
-      router.replace(HOME_URL);
-    }
-  }, [userId, router]);
 
   // 给回车键添加事件处理
   useEffect(() => {
@@ -331,37 +337,26 @@ function LoginPage() {
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "row",
+              marginTop: "4px",
               marginBottom: "16px",
             }}
           >
-            <Link
+            <MuiLink
               href="/forget"
-              passHref
+              style={{
+                cursor: "pointer",
+              }}
             >
-              <MuiLink
-                underline="hover"
-                sx={{
-                  margin: "4px 0 0 0",
-                  cursor: "pointer",
-                }}
-              >
-                忘记密码?
-              </MuiLink>
-            </Link>
-            <Link
+              忘记密码?
+            </MuiLink>
+            <MuiLink
               href="/register"
-              passHref
+              style={{
+                cursor: "pointer",
+              }}
             >
-              <MuiLink
-                underline="hover"
-                sx={{
-                  margin: "4px 0 0 0",
-                  cursor: "pointer",
-                }}
-              >
-                注册账号
-              </MuiLink>
-            </Link>
+              注册账号
+            </MuiLink>
           </Box>
           <LoadingButton
             ref={loginButtonRef}

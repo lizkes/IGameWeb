@@ -9,7 +9,7 @@ import {
   useVerifyImageVerifyMutation,
 } from "src/apis/verifyImage";
 import { handleAxiosError } from "src/utils/error";
-import CustomPopper from "src/components/CustomPopper";
+import { CustomPopper } from "src/components";
 
 type Props = {
   anchorEl: VirtualElement | (() => VirtualElement) | null | undefined;

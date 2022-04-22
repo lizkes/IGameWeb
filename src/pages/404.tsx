@@ -1,8 +1,8 @@
-import { Button, Container, Typography } from "@mui/material";
-import Link from "next/link";
+import { Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 
 import { HOME_URL } from "src/variants";
+import { MuiLinkButton } from "src/components";
 
 function NotFoundPage() {
   return (
@@ -28,19 +28,13 @@ function NotFoundPage() {
         >
           页面不存在
         </Typography>
-
-        <Link
+        <MuiLinkButton
           href={HOME_URL}
-          passHref
+          variant="contained"
+          size="large"
         >
-          <Button
-            component="a"
-            size="large"
-            variant="contained"
-          >
-            返回主页
-          </Button>
-        </Link>
+          返回主页
+        </MuiLinkButton>
       </Container>
     </>
   );

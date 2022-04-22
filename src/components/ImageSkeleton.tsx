@@ -7,7 +7,6 @@ interface Props extends ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   paddingTop: string;
   width?: string;
-  height?: string;
   alt?: string;
   timeout?: number;
 }

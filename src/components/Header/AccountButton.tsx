@@ -5,7 +5,6 @@ import {
   Typography,
   Box,
   Button,
-  Link as MuiLink,
   LinearProgress,
   Chip,
   Divider,
@@ -21,7 +20,7 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import { amber, green, purple, red } from "@mui/material/colors";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { useSnackbar, useStore } from "src/hooks";
 import { useUserDailyBonusMutation, useUserInfoQuery } from "src/apis/user";
@@ -29,15 +28,21 @@ import { handleAxiosError } from "src/utils/error";
 import { expToLevel, nextLevelExp } from "src/utils/exp";
 import { dateFormat, toDate, isToday, dateToDay } from "src/utils/time";
 import { setAccessToken, setRefreshToken } from "src/utils/localStorage";
-import CustomPopper from "src/components/CustomPopper";
-import FlashingBadge from "src/components/FlashingBadge";
-import NormalSkeleton from "src/components/NormalSkeleton";
+import {
+  CustomPopper,
+  FlashingBadge,
+  NormalSkeleton,
+  MuiLink,
+  MuiLinkButton,
+} from "src/components";
 
 const AccountButton = () => {
   const queryClient = useQueryClient();
   const sendSnackbar = useSnackbar();
+  const router = useRouter();
   const userId = useStore((store) => store.userId);
-  const userLogout = useStore((store) => store.userLogout);
+  const setUserId = useStore((store) => store.setUserId);
+  const setFromUrl = useStore((store) => store.setFromUrl);
 
   const [popperIsOpen, setPopperIsOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -55,7 +60,7 @@ const AccountButton = () => {
           // 如果系统没有维护中, 注销用户
           setAccessToken(null);
           setRefreshToken(null);
-          userLogout();
+          setUserId(null);
         }
       },
     }
@@ -200,25 +205,19 @@ const AccountButton = () => {
                 </Typography>
               ) : null}
             </Box>
-            <Link
+            <MuiLinkButton
               href="/buy/vip"
-              passHref
+              fullWidth
+              variant="contained"
+              style={{
+                fontSize: "1.1rem",
+              }}
+              onClick={() => {
+                setPopperIsOpen(false);
+              }}
             >
-              <Button
-                fullWidth
-                component="a"
-                variant="contained"
-                color="primary"
-                sx={{
-                  fontSize: "1.1rem",
-                }}
-                onClick={() => {
-                  setPopperIsOpen(false);
-                }}
-              >
-                {isVip ? "会员续期" : "成为会员"}
-              </Button>
-            </Link>
+              {isVip ? "会员续期" : "成为会员"}
+            </MuiLinkButton>
             <Divider
               sx={{
                 margin: "16px 0",
@@ -328,7 +327,7 @@ const AccountButton = () => {
                 setPopperIsOpen(false);
                 setAccessToken(null);
                 setRefreshToken(null);
-                userLogout();
+                setUserId(null);
               }}
             >
               注销
@@ -389,41 +388,33 @@ const AccountButton = () => {
                 <Typography>获取订阅更新</Typography>
               </Box>
             </Box>
-            <Link
+            <MuiLinkButton
               href="/login"
-              passHref
+              fullWidth
+              variant="contained"
+              style={{ marginBottom: "8px", fontSize: "1.1rem" }}
+              onClick={() => {
+                setPopperIsOpen(false);
+                setFromUrl(router.pathname);
+              }}
             >
-              <Button
-                fullWidth
-                component="a"
-                variant="contained"
-                sx={{ marginBottom: "8px", fontSize: "1.1rem" }}
-                onClick={() => {
-                  setPopperIsOpen(false);
-                }}
-              >
-                立即登录
-              </Button>
-            </Link>
+              立即登录
+            </MuiLinkButton>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Typography>
                 首次使用？
-                <Link
+                <MuiLink
                   href="/register"
-                  passHref
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setPopperIsOpen(false);
+                    setFromUrl(router.pathname);
+                  }}
                 >
-                  <MuiLink
-                    underline="hover"
-                    sx={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      setPopperIsOpen(false);
-                    }}
-                  >
-                    点我注册
-                  </MuiLink>
-                </Link>
+                  点我注册
+                </MuiLink>
               </Typography>
             </Box>
           </>

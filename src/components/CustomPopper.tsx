@@ -32,7 +32,7 @@ type Props = {
 const CustomPopper: FC<Props> = ({
   anchorEl,
   isOpen,
-  closeFn,
+  closeFn = () => {},
   children,
   popperProps,
   paperSx,
@@ -40,9 +40,6 @@ const CustomPopper: FC<Props> = ({
   transformOrigin = "top",
   clickAwayEnable = true,
 }) => {
-  if (closeFn === undefined) {
-    closeFn = () => {};
-  }
   return (
     <Popper
       anchorEl={anchorEl}

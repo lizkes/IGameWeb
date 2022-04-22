@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Box, ButtonBase, Typography } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 
-import MarkdownParser from "src/components/MarkdownParser";
+import { MarkdownParser } from "src/components";
 
 type Props = {
   children: string;

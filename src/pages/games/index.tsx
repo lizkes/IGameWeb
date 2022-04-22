@@ -22,7 +22,6 @@ export async function getStaticProps() {
     limit: ENTRY_NUMBER_PER_PAGE,
     sortBy: "id",
     tagIds: [],
-    dependAppId: null,
   });
 
   return {

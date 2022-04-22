@@ -51,7 +51,7 @@ type AppBriefInfosQueryArg = {
   limit: number;
   sortBy: string;
   tagIds: Array<number>;
-  dependAppId: number | null;
+  dependAppId?: number | null;
 };
 type AppBriefInfosQueryData = Array<{
   id: number;
@@ -74,7 +74,7 @@ const useAppBriefInfosQuery = (
     limit,
     sortBy,
     tagIds,
-    dependAppId,
+    dependAppId = null,
   }: AppBriefInfosQueryArg,
   options?: ApiQueryOptions<AppBriefInfosQueryData>
 ) => {
@@ -97,7 +97,14 @@ const useAppBriefInfosQuery = (
 };
 const prefetchAppBriefInfosQuery = async (
   queryClient: QueryClient,
-  { appType, offset, limit, sortBy, tagIds, dependAppId }: AppBriefInfosQueryArg
+  {
+    appType,
+    offset,
+    limit,
+    sortBy,
+    tagIds,
+    dependAppId = null,
+  }: AppBriefInfosQueryArg
 ) => {
   await queryClient.prefetchQuery(
     ["appBriefInfos", appType, offset, limit, sortBy, tagIds, dependAppId],
@@ -117,7 +124,11 @@ const prefetchAppBriefInfosQuery = async (
   );
 };
 
-type AppInfoQueryArg = { id?: number; type?: AppType; appId?: number };
+type AppInfoQueryArg = {
+  id?: number | null;
+  type?: AppType | null;
+  appId?: number | null;
+};
 type AppInfoQueryData = {
   id: number;
   type: AppType;
@@ -140,7 +151,7 @@ type AppInfoQueryData = {
   updated_at: string;
 };
 const useAppInfoQuery = (
-  { id, type, appId }: AppInfoQueryArg,
+  { id = null, type = null, appId = null }: AppInfoQueryArg,
   options?: ApiQueryOptions<AppInfoQueryData>
 ) => {
   return useQuery<AxiosResponse<AppInfoQueryData, any>, AxiosError>(
@@ -159,7 +170,7 @@ const useAppInfoQuery = (
 };
 const prefetchAppInfoQuery = async (
   queryClient: QueryClient,
-  { id, type, appId }: AppInfoQueryArg
+  { id = null, type = null, appId = null }: AppInfoQueryArg
 ) => {
   await queryClient.prefetchQuery(["appInfo", id, type, appId], async () => {
     const { data } = await baseAxios.get("/app/info", {

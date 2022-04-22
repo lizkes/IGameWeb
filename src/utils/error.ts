@@ -15,14 +15,14 @@ type ErrorInfo = {
   isClientErorr: boolean;
 };
 
-const handleAxiosError = (error: AxiosError | null): ErrorInfo => {
+const handleAxiosError = (error?: AxiosError | null): ErrorInfo => {
   let info: ErrorInfo = {
     code: -1,
     cause: "",
     content: "未预期的错误",
     isClientErorr: false,
   };
-  if (error === null) {
+  if (error === null || error === undefined) {
     return info;
   }
 

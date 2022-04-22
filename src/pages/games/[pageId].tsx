@@ -16,10 +16,6 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import Layout from "src/components/Layout";
-import NormalSkeleton from "src/components/NormalSkeleton";
-import BasePage from "src/components/BasePage";
-import ErrorPage from "src/components/ErrorPage";
 import { useSnackbar, useStore } from "src/hooks";
 import { ENTRY_NUMBER_PER_PAGE } from "src/variants";
 import { handleAxiosError } from "src/utils/error";
@@ -34,14 +30,7 @@ import {
   prefetchAppAmountQuery,
   prefetchAppBriefInfosQuery,
 } from "src/apis/app";
-
-const chipStyle = {
-  cursor: "pointer",
-  transition: "all 150ms",
-  "&:hover": {
-    filter: "brightness(75%)",
-  },
-};
+import { Layout, NormalSkeleton, BasePage, ErrorPage } from "src/components";
 
 type GameCoverProps = {
   id: number;
@@ -130,7 +119,6 @@ function GameCover({
             {sortedTags.map((tag) => (
               <Chip
                 sx={{
-                  ...chipStyle,
                   margin: "0 2px",
                 }}
                 color="primary"
@@ -151,7 +139,6 @@ function GameCover({
             }}
           >
             <Chip
-              sx={chipStyle}
               icon={<Update />}
               color="secondary"
               size="small"
@@ -160,7 +147,6 @@ function GameCover({
             <Chip
               icon={allowedExp > userExp ? <LockOutlined /> : <LockOpen />}
               sx={{
-                ...chipStyle,
                 paddingLeft: "2px",
                 backgroundColor:
                   allowedExp > userExp
@@ -217,7 +203,6 @@ function GamesPage({ pageId }: { pageId: number }) {
     limit: ENTRY_NUMBER_PER_PAGE,
     sortBy: "id",
     tagIds: [],
-    dependAppId: null,
   });
 
   // 处理API数据
@@ -421,7 +406,6 @@ export async function getStaticProps({
     limit: ENTRY_NUMBER_PER_PAGE,
     sortBy: "id",
     tagIds: [],
-    dependAppId: null,
   });
 
   return {

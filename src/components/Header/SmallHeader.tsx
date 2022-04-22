@@ -1,11 +1,11 @@
+import { AppBar, Box, Container, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { AppBar, Box, Container, Button } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 import { HOME_URL } from "src/variants";
-import HideOnScroll from "src/components/HideOnScroll";
+import { HideOnScroll, MuiLinkButton } from "src/components";
 
 const HeaderDrawer = dynamic(() => import("./HeaderDrawer"));
 
@@ -49,18 +49,13 @@ export default function BigHeader() {
               </Box>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
-            <Link
+            <MuiLinkButton
               href="/register"
-              passHref
+              variant="contained"
+              style={{ marginRight: "8px" }}
             >
-              <Button
-                component="a"
-                sx={{ mr: 1 }}
-                variant="contained"
-              >
-                注册
-              </Button>
-            </Link>
+              注册
+            </MuiLinkButton>
             <HeaderDrawer />
           </Container>
         </AppBar>

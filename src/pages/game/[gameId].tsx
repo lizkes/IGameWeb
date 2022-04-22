@@ -8,98 +8,19 @@ import { baseAxios } from "src/apis";
 import { useAppInfoQuery, prefetchAppInfoQuery } from "src/apis/app";
 import { handleAxiosError } from "src/utils/error";
 import { dateFormat, toDate } from "src/utils/time";
-import NormalSkeleton from "src/components/NormalSkeleton";
-import Layout from "src/components/Layout";
-import BasePage from "src/components/BasePage";
-import ErrorPage from "src/components/ErrorPage";
-import MediaCarousel, { Media } from "src/components/MediaCarousel";
-import MarkdownOverflowBox from "src/components/MarkdownOverflowBox";
-import MarkdownParser from "src/components/MarkdownParser";
-
-type LeftGridProps = {
-  appId: number;
-  content: string;
-  contentImages: Array<string>;
-  contentVideos: Array<string>;
-  contentVideoThumbs: Array<string>;
-};
-
-function LeftGrid({
-  appId,
-  content,
-  contentImages,
-  contentVideos,
-  contentVideoThumbs,
-}: LeftGridProps) {
-  const medias = useMemo(() => {
-    const m: Array<Media> = [];
-    for (const [index, video] of contentVideos.entries()) {
-      m.push({
-        type: "video",
-        mediaUrl: video,
-        thumbUrl: contentVideoThumbs[index],
-      });
-    }
-    for (const image of contentImages) {
-      m.push({
-        type: "image",
-        mediaUrl: image,
-        thumbUrl: image,
-      });
-    }
-    return m;
-  }, [contentImages, contentVideos, contentVideoThumbs]);
-
-  return (
-    <Grid
-      item
-      sx={{
-        order: 1,
-        padding: "0 12px",
-        width: {
-          default: "100%",
-          pad: "70%",
-          tablet: "75%",
-        },
-      }}
-    >
-      <Divider
-        sx={{
-          display: {
-            default: "block",
-            pad: "none",
-          },
-          margin: {
-            default: "24px 0",
-            pad: "0",
-          },
-        }}
-      />
-      <MediaCarousel medias={medias} />
-      <Divider
-        sx={{
-          margin: "24px 0",
-        }}
-      />
-      <MarkdownOverflowBox>{content}</MarkdownOverflowBox>
-      <Divider
-        sx={{
-          margin: "16px 0 24px 0",
-        }}
-      />
-      <ResourceContainer appId={appId} />
-    </Grid>
-  );
-}
-
-const chipStyle = {
-  cursor: "pointer",
-  transition: "all 150ms",
-  "&:hover": {
-    filter: "brightness(75%)",
-  },
-  margin: "0 2px",
-};
+import {
+  NormalSkeleton,
+  Layout,
+  BasePage,
+  ErrorPage,
+  MediaCarousel,
+  MarkdownOverflowBox,
+  MarkdownParser,
+  ImageSkeleton,
+  ResourceContainer,
+  MuiLinkButton,
+} from "src/components";
+import { Media } from "src/components/MediaCarousel";
 
 type Tag = {
   tag_id: number;
@@ -107,9 +28,10 @@ type Tag = {
 };
 
 type RightGridProps = {
+  gameId: number;
   tags: Array<Tag>;
   title: string;
-  description: string;
+  shortDescription: string;
   view: number;
   subscription: number;
   downloaded: number;
@@ -118,9 +40,10 @@ type RightGridProps = {
 };
 
 function RightGrid({
+  gameId,
   tags,
   title,
-  description,
+  shortDescription,
   view,
   subscription,
   downloaded,
@@ -160,8 +83,8 @@ function RightGrid({
       >
         <ImageSkeleton
           src={image}
-          alt={title}
           paddingTop="57.31%"
+          alt={title}
         />
         <Box
           sx={{
@@ -174,21 +97,21 @@ function RightGrid({
         >
           <Box>
             <Chip
-              sx={chipStyle}
+              sx={{ margin: "0 2px" }}
               icon={<Visibility />}
               color="secondary"
               size="small"
               label={view}
             />
             <Chip
-              sx={chipStyle}
+              sx={{ margin: "0 2px" }}
               icon={<Favorite />}
               color="secondary"
               size="small"
               label={subscription}
             />
             <Chip
-              sx={chipStyle}
+              sx={{ margin: "0 2px" }}
               icon={<Download />}
               color="secondary"
               size="small"
@@ -196,7 +119,7 @@ function RightGrid({
             />
           </Box>
           <Chip
-            sx={chipStyle}
+            sx={{ margin: "0 2px" }}
             icon={<Update />}
             color="secondary"
             size="small"
@@ -214,7 +137,7 @@ function RightGrid({
         >
           {tags.map((tag) => (
             <Chip
-              sx={chipStyle}
+              sx={{ margin: "0 2px" }}
               color="primary"
               size="small"
               key={tag.tag_id}
@@ -222,7 +145,7 @@ function RightGrid({
             />
           ))}
         </Box>
-        <MarkdownParser>{description}</MarkdownParser>
+        <MarkdownParser>{shortDescription}</MarkdownParser>
         <Box
           sx={{
             width: "100%",
@@ -250,22 +173,14 @@ function RightGrid({
           >
             下载链接
           </Button>
-          <Button
-            variant="contained"
+          <MuiLinkButton
+            href={`/expansions?game=${gameId}`}
             size="large"
-            sx={{
-              backgroundColor: blue[800],
-              transition: "all 150ms",
-              width: "100%",
-              "&:hover": {
-                filter: "brightness(75%)",
-                backgroundColor: blue[800],
-              },
-            }}
-            onClick={() => navigate(`${location.pathname}/expansion`)}
+            variant="contained"
+            color="secondary"
           >
             相关拓展
-          </Button>
+          </MuiLinkButton>
         </Box>
       </Box>
     </Grid>
@@ -309,6 +224,22 @@ function GamePage({ gameId }: { gameId: number }) {
       />
     );
   } else {
+    const medias: Array<Media> = [];
+    for (const [index, video] of gameInfo!.content_videos.entries()) {
+      medias.push({
+        type: "video",
+        mediaUrl: video,
+        thumbUrl: gameInfo!.content_video_thumbs[index],
+      });
+    }
+    for (const image of gameInfo!.content_images) {
+      medias.push({
+        type: "image",
+        mediaUrl: image,
+        thumbUrl: image,
+      });
+    }
+
     return (
       <>
         <NextSeo
@@ -354,17 +285,45 @@ function GamePage({ gameId }: { gameId: number }) {
               },
             }}
           >
-            <LeftGrid
-              appId={gameInfo!.app_id}
-              content={gameInfo!.long_description}
-              contentImages={gameInfo!.content_images}
-              contentVideos={gameInfo!.content_videos}
-              contentVideoThumbs={gameInfo!.content_video_thumbs}
-            />
+            <Grid
+              item
+              sx={{
+                order: 1,
+                padding: "0 12px",
+                width: {
+                  default: "100%",
+                  pad: "70%",
+                  tablet: "75%",
+                },
+              }}
+            >
+              <Divider
+                sx={{
+                  display: {
+                    default: "block",
+                    pad: "none",
+                  },
+                  margin: {
+                    default: "24px 0",
+                    pad: "0",
+                  },
+                }}
+              />
+              <MediaCarousel medias={medias} />
+              <Divider
+                sx={{
+                  margin: "24px 0",
+                }}
+              />
+              <MarkdownOverflowBox>
+                {gameInfo!.long_description}
+              </MarkdownOverflowBox>
+            </Grid>
             <RightGrid
+              gameId={gameId}
               tags={gameInfo!.tags}
               title={gameInfo!.name}
-              description={gameInfo!.short_description}
+              shortDescription={gameInfo!.short_description}
               view={gameInfo!.viewed}
               subscription={gameInfo!.subscribed}
               downloaded={gameInfo!.downloaded}
@@ -372,6 +331,12 @@ function GamePage({ gameId }: { gameId: number }) {
               updatedAt={gameInfo!.updated_at}
             />
           </Grid>
+          <Divider
+            sx={{
+              margin: "16px 0 24px 0",
+            }}
+          />
+          <ResourceContainer appId={gameInfo!.app_id} />
         </BasePage>
       </>
     );

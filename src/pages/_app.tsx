@@ -34,15 +34,15 @@ function MyApp({
 
   // set user state if localstorage has token
   const userId = useStore((store) => store.userId);
-  const userLogin = useStore((store) => store.userLogin);
+  const setUserId = useStore((store) => store.setUserId);
   useEffect(() => {
     if (userId === null) {
       const userIdFromToken = getUserIdFromToken();
-      if (userIdFromToken !== null) {
-        userLogin(userIdFromToken);
+      if (userIdFromToken !== userId) {
+        setUserId(userIdFromToken);
       }
     }
-  }, [userId, userLogin]);
+  }, [userId, setUserId]);
 
   return (
     <CacheProvider value={emotionCache}>

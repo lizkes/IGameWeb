@@ -50,6 +50,17 @@ const darkTheme = createTheme(
       //     },
       //   },
       // },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            cursor: "pointer",
+            transition: "all 150ms",
+            "&:hover": {
+              filter: "brightness(75%)",
+            },
+          },
+        },
+      },
       MuiPaper: {
         styleOverrides: {
           root: {

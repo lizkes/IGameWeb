@@ -2,17 +2,19 @@ import create, { SetState } from "zustand";
 
 type Store = {
   userId: number | null;
-  userLogin: (userId: number) => void;
-  userLogout: () => void;
+  setUserId: (value: number | null) => void;
+  fromUrl: string | null;
+  setFromUrl: (value: string | null) => void;
 };
 
 const useStore = create<Store>((set: SetState<Store>) => ({
   userId: null,
-  userLogin: (userId) => {
-    set({ userId: userId });
+  setUserId: (value) => {
+    set({ userId: value });
   },
-  userLogout: () => {
-    set({ userId: null });
+  fromUrl: null,
+  setFromUrl: (value) => {
+    set({ fromUrl: value });
   },
 }));
 
