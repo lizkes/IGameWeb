@@ -7,7 +7,7 @@
     "start": "next start",
     "product": "next build && next start",
     "lint": "next lint",
-    "upgrade-all": "ncu -u"
+    "upgrade-all": "yarn upgrade && ncu -u && yarn install"
   },
   "dependencies": {
     "@emotion/cache": "^11.7.1",
@@ -35,7 +35,7 @@
     "@types/node": "17.0.25",
     "@types/react": "18.0.6",
     "@types/video.js": "^7.3.33",
-    "eslint": "8.13.0",
+    "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.6.2",
